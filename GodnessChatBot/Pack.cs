@@ -24,5 +24,10 @@ namespace GodnessChatBot
         {
             throw new NotImplementedException();
         }
+
+        public void Learn()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
