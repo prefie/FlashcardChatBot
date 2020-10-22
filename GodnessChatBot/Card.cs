@@ -4,17 +4,15 @@ namespace GodnessChatBot
 {
     public class Card
     {
-        public string Face { get; set; }
-        public string Back { get; set; }
+        public string Face { get; }
+        public string Back { get; }
 
         public Card(string face, string back)
         {
-            throw new NotImplementedException();
+            Face = face;
+            Back = back;
         }
 
-        public void Reverse()
-        {
-            throw new NotImplementedException();
-        }
+        public Card Reverse() => new Card(Back, Face);
     }
 }
