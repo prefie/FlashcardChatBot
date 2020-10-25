@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GodnessChatBot
+﻿namespace GodnessChatBot
 {
     public class Card
     {
@@ -14,5 +12,15 @@ namespace GodnessChatBot
         }
 
         public Card Reverse() => new Card(Back, Face);
+
+        public override int GetHashCode() => (Face, Back).GetHashCode();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null) return false;
+            var card = (Card) obj;
+
+            return Face == card.Face && Back == card.Back;
+        }
     }
 }

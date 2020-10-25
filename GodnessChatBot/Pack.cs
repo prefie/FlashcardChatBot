@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GodnessChatBot
 {
@@ -11,43 +11,47 @@ namespace GodnessChatBot
         public IReadOnlyList<Card> Cards => cards.AsReadOnly();
         private List<LearningWay> learningWay;
         public IReadOnlyList<LearningWay> LearningWays => learningWay.AsReadOnly();
-        
-        public bool IsReadonly { get; private set; }
 
         public bool CanReverse { get; private set; }
 
         public Pack(
             string name,
-            List<Card> cards,
-            List<LearningWay> learningWay,
-            bool isReadonly,
+            IEnumerable<Card> cards,
+            IEnumerable<LearningWay> learningWay,
             bool canReverse)
         {
             Name = name;
-            IsReadonly = isReadonly;
             CanReverse = canReverse;
-            this.cards = cards;
-            this.learningWay = learningWay;
+            this.cards = cards.ToList();
+            this.learningWay = learningWay.ToList();
         }
 
-        public Pack(string name)
+        public Pack(string name, Card[] cards1, LearningWay[] learningWays)
         {
             Name = name;
         }
+
+        public bool CanLearningWay(LearningWay learningWay) => LearningWays.Contains(learningWay);
 
         public void AddCard(Card card) => cards.Add(card);
 
         public bool RemoveCard(Card card) => cards.Remove(card);
         public void Rename(string name) => Name = name;
 
-        public void Share()
+        public Pack Share() => new Pack(Name, Cards, LearningWays, CanReverse);
+        
+        public override int GetHashCode() => Name.GetHashCode();
+
+        public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+
+            var category = (Pack) obj;
+            return string.Equals(Name, category.Name);
         }
 
-        public IEnumerable<T> Learn<T>(LearningWay learningWay)
-        {
-            throw new NotImplementedException();
-        }
+        public Card this[int index] => cards[index];
     }
 }
