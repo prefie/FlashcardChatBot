@@ -30,12 +30,12 @@ namespace GodnessChatBot
         public void StartLearning(string nameCategory, string namePack, LearningWay learningWay)
         {
             if (Status != TeacherStatus.Idles) throw new InvalidOperationException();
-
+            
+            CurrentPack = GetCategory(nameCategory).GetPack(namePack);
             if(!CurrentPack.CanLearningWay(learningWay))
                 throw new ArgumentException($"The deck does not support {learningWay} learning method.");
             
             Status = TeacherStatus.ReceivingFaceСard;
-            CurrentPack = GetCategory(nameCategory).GetPack(namePack);
             CurrentIndex = 0;
             CurrentLearningWay = learningWay;
         }
