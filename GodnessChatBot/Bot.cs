@@ -1,14 +1,13 @@
 ﻿using System;
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace GodnessChatBot
 {
     public static class Bot
     {
         private static readonly TelegramBotClient bot;
-        private static readonly Teacher teacher;
-        private static Category currentCategory;
 
         static Bot()
         {
@@ -29,6 +28,26 @@ namespace GodnessChatBot
             
             var bot = (TelegramBotClient) sender;
             Console.WriteLine($"{message.From.FirstName} {message.From.LastName} отправил сообщение боту: {message.Text}");
+
+            switch (message.Text)
+            {
+                case "/menu":
+                    var replyKeyboard = new ReplyKeyboardMarkup(new []
+                    {
+                        new[]
+                        {
+                            new KeyboardButton("Создать"),
+                            new KeyboardButton("Учить")
+                        },
+                        new []
+                        {
+                            new KeyboardButton("Изменить"),
+                            new KeyboardButton("Отправить")
+                        }
+                    }, true);
+                    await bot.SendTextMessageAsync(message.From.Id, "Выбирай", replyMarkup: replyKeyboard);
+                    break;
+            }
         }
     }
 }
