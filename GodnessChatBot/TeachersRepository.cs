@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
@@ -68,8 +69,23 @@ namespace GodnessChatBot
         private List<Category> GetCategories(string userName)
         {
             var table = GetValuesSheet(userName)?.Values;
-            // Парсинг таблицы
-            return default;
+            var categories = new Dictionary<string, Category>();
+            for (var i = 0; i < table.Count; i+=3)
+            {
+                var name = table[i][0].ToString();
+                var category = new Category(name);
+                if (!categories.ContainsKey(name))
+                    categories.Add(name, category);
+                var namePack = table[i + 1][0].ToString();
+                var cards = new List<Card>();
+                for (var j = 1; j < table[i].Count; j++)
+                {
+                    cards.Add(new Card(table[i][j].ToString(), table[i+1][j].ToString()));
+                }
+                categories[name].AddPack(new Pack(namePack, cards, new List<LearningWay> {LearningWay.LearnYourself}, false));
+            }
+
+            return categories.Values.ToList();
         }
 
         public Teacher GetTeacher(string userName)

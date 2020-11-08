@@ -26,9 +26,12 @@ namespace GodnessChatBot
             this.learningWay = learningWay.ToList();
         }
 
-        public Pack(string name, Card[] cards1, LearningWay[] learningWays)
+        public Pack(string name, bool canReverse)
         {
             Name = name;
+            CanReverse = canReverse;
+            cards = new List<Card>();
+            learningWay = new List<LearningWay> { LearningWay.LearnYourself };
         }
 
         public bool CanLearningWay(LearningWay learningWay) => LearningWays.Contains(learningWay);

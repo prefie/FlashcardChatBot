@@ -6,7 +6,7 @@ namespace GodnessChatBot
     {
         public static void Main(string[] args)
         {
-            // var repository = new TeachersRepository();
+            var repository = new TeachersRepository();
             // Bot.Start();
             // Console.ReadKey();
             // Bot.Stop();
