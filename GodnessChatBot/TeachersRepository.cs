@@ -28,6 +28,7 @@ namespace GodnessChatBot
             
             var credential = GetSheetCredentials();
             service = GetService(credential);
+            
         }
         
         private SheetsService GetService(UserCredential credential)
