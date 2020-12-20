@@ -4,6 +4,7 @@
     {
         public string Face { get; }
         public string Back { get; }
+        public int Statistic { get; set; }
 
         public Card(string face, string back)
         {

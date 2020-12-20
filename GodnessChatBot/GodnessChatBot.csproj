@@ -79,7 +79,11 @@
         <Compile Include="Bot.cs" />
         <Compile Include="Domain\Card.cs" />
         <Compile Include="Domain\Category.cs" />
+        <Compile Include="Domain\ILearningWay.cs" />
+        <Compile Include="Domain\LearningWayByTest.cs" />
         <Compile Include="Domain\LearningWay.cs" />
+        <Compile Include="Domain\LearningWayByTyping.cs" />
+        <Compile Include="Domain\LearningWayCheckYourself.cs" />
         <Compile Include="Domain\Pack.cs" />
         <Compile Include="Domain\Teacher.cs" />
         <Compile Include="Domain\TeachersRepository.cs" />

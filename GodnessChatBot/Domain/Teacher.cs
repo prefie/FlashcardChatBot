@@ -59,7 +59,7 @@ namespace GodnessChatBot
                 case LearningWay.LearnByTyping:
                     return new List<string>();
                 case LearningWay.LearnYourself:
-                    return new List<string> {"Помню", "Не помню"};
+                    return new List<string> {"Показать ответ"};
                 case LearningWay.LearnByTest:
                 {
                     return CurrentPack.Cards
