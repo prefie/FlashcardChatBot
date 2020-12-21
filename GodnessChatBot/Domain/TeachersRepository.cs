@@ -176,35 +176,35 @@ namespace GodnessChatBot
             }
         }
 
-        private List<Category> GetCategories(int idUser)
+        // private List<Category> GetCategories(int idUser)
+        // {
+        //     var table = GetValuesSheet(idUser)?.Values;
+        //     var categories = new Dictionary<string, Category>();
+        //     for (var i = 0; i < table.Count; i+=3)
+        //     {
+        //         var name = table[i][0].ToString();
+        //         if (!categories.ContainsKey(name))
+        //         {
+        //             var category = new Category(name);
+        //             categories.Add(name, category);
+        //         }
+        //
+        //         var namePack = table[i + 1][0].ToString();
+        //         var cards = new List<Card>();
+        //         for (var j = 1; j < table[i].Count; j++)
+        //         {
+        //             cards.Add(new Card(table[i][j].ToString(), table[i+1][j].ToString()));
+        //         }
+        //         categories[name].AddPack(new Pack(namePack, cards, new List<LearningWay> {LearningWay.LearnYourself}, false));
+        //     }
+        //
+        //     return categories.Values.ToList();
+        // }
+
+        public Pack GetPack(int idUser)
         {
-            var table = GetValuesSheet(idUser)?.Values;
-            var categories = new Dictionary<string, Category>();
-            for (var i = 0; i < table.Count; i+=3)
-            {
-                var name = table[i][0].ToString();
-                if (!categories.ContainsKey(name))
-                {
-                    var category = new Category(name);
-                    categories.Add(name, category);
-                }
-
-                var namePack = table[i + 1][0].ToString();
-                var cards = new List<Card>();
-                for (var j = 1; j < table[i].Count; j++)
-                {
-                    cards.Add(new Card(table[i][j].ToString(), table[i+1][j].ToString()));
-                }
-                categories[name].AddPack(new Pack(namePack, cards, new List<LearningWay> {LearningWay.LearnYourself}, false));
-            }
-
-            return categories.Values.ToList();
-        }
-
-        public Teacher GetTeacher(int idUser)
-        {
-            var categories = GetCategories(idUser);
-            return new Teacher(categories);
+            //return pack;
+            throw new Exception();
         }
     }
 }

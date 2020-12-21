@@ -1,21 +1,31 @@
-﻿namespace GodnessChatBot
+﻿using System.Collections.Generic;
+
+namespace GodnessChatBot
 {
     public class LearningWayCheckYourself : ILearningWay
     {
         public string Name { get; set; }
         public Pack Pack { get; set; }
-
-        public void SendQuestion()
+        private int CardIndex { get; set; }
+        
+        public LearningWayCheckYourself()
         {
-            throw new System.NotImplementedException();
+        }
+        
+        public LearningWayCheckYourself(Pack pack)
+        {
+            Pack = pack;
+        }
+        
+        public string SendQuestion(int cardIndex)
+        {
+            CardIndex = cardIndex;
+            return Pack[CardIndex].Face;
         }
 
-        public void SendPossibleAnswers()
-        {
-            throw new System.NotImplementedException();
-        }
+        public List<string> SendPossibleAnswers() => new List<string> { "Помню", "Не помню" };
 
-        public void GetAnswer(string answer)
+        public string GetAnswer(string answer)
         {
             throw new System.NotImplementedException();
         }
