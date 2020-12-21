@@ -11,6 +11,13 @@
             Face = face;
             Back = back;
         }
+        
+        public Card(string face, string back, int statistic)
+        {
+            Face = face;
+            Back = back;
+            Statistic = statistic;
+        }
 
         public Card Reverse() => new Card(Back, Face);
 
