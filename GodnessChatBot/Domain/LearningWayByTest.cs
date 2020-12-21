@@ -1,23 +1,42 @@
-﻿namespace GodnessChatBot
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace GodnessChatBot
 {
     public class LearningWayByTest : ILearningWay
     {
         public string Name { get; set; }
         public Pack Pack { get; set; }
+        private int CardIndex { get; set; }
 
-        public void SendQuestion()
+        public LearningWayByTest(Pack pack)
         {
-            throw new System.NotImplementedException();
+            Pack = pack;
         }
 
-        public void SendPossibleAnswers()
+        public string SendQuestion(int cardIndex)
         {
-            throw new System.NotImplementedException();
+            CardIndex = cardIndex;
+            return Pack[CardIndex].Face;
         }
 
-        public void GetAnswer(string answer)
+        public List<string> SendPossibleAnswers()
         {
-            throw new System.NotImplementedException();
+            var random = new Random();
+            return Pack.Cards
+                .Where(card => !Equals(card, Pack[CardIndex]))
+                .OrderBy(x => random.Next())
+                .Select(card => card.Back)
+                .Take(3)
+                .Append(Pack[CardIndex].Back)
+                .OrderBy(x => random.Next())
+                .ToList();
         }
+
+        public string GetAnswer(string answer)
+            => Pack[CardIndex].Back == answer 
+                ? "Верно!" 
+                : $"Неверно :(\nПравильный ответ: {Pack[CardIndex].Back}";
     }
 }
