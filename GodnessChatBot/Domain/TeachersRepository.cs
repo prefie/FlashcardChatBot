@@ -39,7 +39,7 @@ namespace GodnessChatBot
             
             var pack = new Pack(packName, false);
 
-            if (table == null) return pack;
+            if (table == null) return null;
             for (var i = 1; i < table.Count; i++)
             {
                 if (table[i].Count != 3) continue;
@@ -107,6 +107,7 @@ namespace GodnessChatBot
             for (var i = 1; i < table.Count; i++)
             {
                 var row = table[i].Select(x => x.ToString()).ToArray();
+                if (row.Length < 3) return null;
                 if (row[0] == userId)
                     return row[2];
             }
@@ -161,6 +162,8 @@ namespace GodnessChatBot
             for (var i = 1; i < table.Count; i++)
             {
                 var row = table[i].Select(x => x.ToString()).ToArray();
+                
+                if (row.Length < 3) return null;
                 if (row[0] == userId)
                     return row[1];
             }
