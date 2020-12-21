@@ -9,15 +9,15 @@ namespace GodnessChatBot
         public string Name { get; private set; }
         private List<Card> cards;
         public IReadOnlyList<Card> Cards => cards.AsReadOnly();
-        private List<LearningWay> learningWay;
-        public IReadOnlyList<LearningWay> LearningWays => learningWay.AsReadOnly();
+        private List<ILearningWay> learningWay;
+        public IReadOnlyList<ILearningWay> LearningWays => learningWay.AsReadOnly();
 
         public bool CanReverse { get; private set; }
 
         public Pack(
             string name,
             IEnumerable<Card> cards,
-            IEnumerable<LearningWay> learningWay,
+            IEnumerable<ILearningWay> learningWay,
             bool canReverse)
         {
             Name = name;
@@ -31,10 +31,10 @@ namespace GodnessChatBot
             Name = name;
             CanReverse = canReverse;
             cards = new List<Card>();
-            learningWay = new List<LearningWay> { LearningWay.LearnYourself };
+            learningWay = new List<ILearningWay> { new LearningWayCheckYourself() };
         }
 
-        public bool CanLearningWay(LearningWay learningWay) => LearningWays.Contains(learningWay);
+        public bool CanLearningWay(ILearningWay learningWay) => LearningWays.Contains(learningWay);
 
         public void AddCard(Card card) => cards.Add(card);
 

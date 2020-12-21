@@ -1,11 +1,13 @@
-﻿namespace GodnessChatBot
+﻿using System.Collections.Generic;
+
+namespace GodnessChatBot
 {
     public interface ILearningWay
     {
         string Name { get; set; }
         Pack Pack { get; set; }
-        void SendQuestion();
-        void SendPossibleAnswers();
-        void GetAnswer(string answer);
+        string SendQuestion(int cardIndex);
+        List<string> SendPossibleAnswers();
+        string GetAnswer(string answer);
     }
 }
