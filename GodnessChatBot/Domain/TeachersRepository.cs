@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
@@ -14,22 +16,24 @@ namespace GodnessChatBot
     internal class TeachersRepository
     {
         private readonly string client;
-        private readonly string[] scopesSheets;
+        private readonly string[] scopes;
         private readonly string appName;
         private readonly string usersSpreadsheetId;
         private readonly string usersSheetTitle;
-        private readonly SheetsService service;
+        private readonly SheetsService sheetsService;
+        private readonly DriveService driveService;
 
         internal TeachersRepository()
         {
             client = "credentials.json";
-            scopesSheets = new []{SheetsService.Scope.Spreadsheets};
+            scopes = new []{DriveService.Scope.Drive, SheetsService.Scope.Spreadsheets};
             appName = "GodnessChatBot";
             usersSpreadsheetId = "1In99pe6lf7W57OT_FWABz8fzpl8T2nbcjcZCLIJAe0s";
             usersSheetTitle = "Users";
             
             var credential = GetSheetCredentials();
-            service = GetService(credential);
+            sheetsService = GetSheetsService(credential);
+            driveService = GetDriveService(credential);
         }
 
         public Pack GetPack(string userId, string packName)
@@ -75,7 +79,7 @@ namespace GodnessChatBot
         public IEnumerable<string> GetPacksNames(string userId)
         {
             var spreadsheetId = GetSpreadsheetId(userId);
-            var spreadsheet = service.Spreadsheets.Get(spreadsheetId).Execute();
+            var spreadsheet = sheetsService.Spreadsheets.Get(spreadsheetId).Execute();
             return spreadsheet?.Sheets.Select(x => x.Properties.Title);
         }
 
@@ -89,11 +93,14 @@ namespace GodnessChatBot
 
             var firstSheet = new Sheet {Properties = new SheetProperties {Title = baseSheet}};
 
-            var spreadsheet = service.Spreadsheets.Create(new Spreadsheet
+            var spreadsheet = sheetsService.Spreadsheets.Create(new Spreadsheet
             {
                 Properties = new SpreadsheetProperties {Title = userId},
                 Sheets = new List<Sheet> {firstSheet}
             }).Execute();
+
+            driveService.Permissions
+                .Create(new Permission {Type = "anyone", Role = "writer"}, spreadsheet.SpreadsheetId).Execute();
 
             UpdateValuesTable(values, spreadsheet.SpreadsheetId, values.Range);
             AddUserInSpreadsheet(userId, spreadsheet.SpreadsheetId, spreadsheet.SpreadsheetUrl);
@@ -115,13 +122,7 @@ namespace GodnessChatBot
             return null;
         }
 
-        public void AddPack(string userId, Pack pack)
-        {
-            var spreadsheetId = GetSpreadsheetId(userId);
-            
-            CreateNewSheet(userId, pack.Name);
-            AddDataToEndOfSheet(spreadsheetId, pack.Name, new object[]{"FACE", "BACK", "STATISTICS"});
-        }
+        public void AddPack(string userId, Pack pack) => CreateNewSheet(userId, pack.Name);
 
         public void AddCardInPack(string userId, string packName, Card card)
         {
@@ -173,14 +174,23 @@ namespace GodnessChatBot
         
         private void UpdateValuesTable(ValueRange values, string spreadsheetId, string range)
         {
-            var request = service.Spreadsheets.Values.Update(values, spreadsheetId, range);
+            var request = sheetsService.Spreadsheets.Values.Update(values, spreadsheetId, range);
             request.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
             request.Execute();
         }
         
-        private SheetsService GetService(UserCredential credential)
+        private SheetsService GetSheetsService(UserCredential credential)
         {
             return new SheetsService(new BaseClientService.Initializer
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = appName
+            });
+        }
+        
+        private DriveService GetDriveService(UserCredential credential)
+        {
+            return new DriveService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
                 ApplicationName = appName
@@ -194,7 +204,7 @@ namespace GodnessChatBot
                 var credPath = Path.Combine(Directory.GetCurrentDirectory(), "sheetsCreds");
                 return GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
-                    scopesSheets,
+                    scopes,
                     "user",
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
@@ -231,7 +241,8 @@ namespace GodnessChatBot
             var batchUpdateRequest = new BatchUpdateSpreadsheetRequest {Requests = request};
             try
             {
-                service.Spreadsheets.BatchUpdate(batchUpdateRequest, spreadsheetId).Execute();
+                sheetsService.Spreadsheets.BatchUpdate(batchUpdateRequest, spreadsheetId).Execute();
+                AddDataToEndOfSheet(spreadsheetId, sheetName, new object[]{"FACE", "BACK", "STATISTICS"});
             }
             catch (Exception)
             {
@@ -243,7 +254,7 @@ namespace GodnessChatBot
         {
             try
             {
-                var values = service.Spreadsheets.Values.Get(spreadsheetId, sheetName).Execute();
+                var values = sheetsService.Spreadsheets.Values.Get(spreadsheetId, sheetName).Execute();
                 return values;
             }
             catch (Exception)
