@@ -8,6 +8,6 @@ namespace GodnessChatBot
         Pack Pack { get; set; }
         string SendQuestion(int cardIndex);
         List<string> SendPossibleAnswers();
-        string GetAnswer(string answer);
+        bool GetAnswer(out string answer, string message);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GodnessChatBot
 {
@@ -21,12 +22,15 @@ namespace GodnessChatBot
 
         public List<string> SendPossibleAnswers()
         {
-            throw new System.NotImplementedException();
+            return new List<string>();
         }
 
-        public string GetAnswer(string answer)
-            => Pack[CardIndex].Back == answer 
-                ? "Верно!" 
+        public bool GetAnswer(out string answer, string message)
+        {
+            answer = String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
+                ? "Верно!"
                 : $"Неверно :(\nПравильный ответ: {Pack[CardIndex].Back}";
+            return String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase);
+        }
     }
 }

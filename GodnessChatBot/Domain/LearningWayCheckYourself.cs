@@ -25,7 +25,7 @@ namespace GodnessChatBot
 
         public List<string> SendPossibleAnswers() => new List<string> { "Помню", "Не помню" };
 
-        public string GetAnswer(string answer)
+        public bool GetAnswer(out string answer, string message)
         {
             throw new System.NotImplementedException();
         }

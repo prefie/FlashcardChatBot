@@ -9,21 +9,17 @@ namespace GodnessChatBot
         public string Name { get; private set; }
         private List<Card> cards;
         public IReadOnlyList<Card> Cards => cards.AsReadOnly();
-        private List<ILearningWay> learningWay;
-        public IReadOnlyList<ILearningWay> LearningWays => learningWay.AsReadOnly();
 
         public bool CanReverse { get; private set; }
 
         public Pack(
             string name,
             IEnumerable<Card> cards,
-            IEnumerable<ILearningWay> learningWay,
             bool canReverse)
         {
             Name = name;
             CanReverse = canReverse;
             this.cards = cards.ToList();
-            this.learningWay = learningWay.ToList();
         }
 
         public Pack(string name, bool canReverse)
@@ -31,17 +27,16 @@ namespace GodnessChatBot
             Name = name;
             CanReverse = canReverse;
             cards = new List<Card>();
-            learningWay = new List<ILearningWay> { new LearningWayCheckYourself() };
         }
 
-        public bool CanLearningWay(ILearningWay learningWay) => LearningWays.Contains(learningWay);
-
+        public void OrderCards() => cards = cards.OrderBy(x => x.Statistic).ToList();
+        
         public void AddCard(Card card) => cards.Add(card);
 
         public bool RemoveCard(Card card) => cards.Remove(card);
         public void Rename(string name) => Name = name;
 
-        public Pack Share() => new Pack(Name, Cards, LearningWays, CanReverse);
+        public Pack Share() => new Pack(Name, Cards, CanReverse);
         
         public override int GetHashCode() => Name.GetHashCode();
 

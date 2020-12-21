@@ -14,16 +14,14 @@ namespace GodnessChatBot
         public Teacher(Pack pack)
         {
             CurrentPack = pack;
+            CurrentPack.OrderCards();
             Status = TeacherStatus.Idles;
         }
 
-        public void StartLearning(string namePack, ILearningWay learningWay)
+        public void StartLearning(ILearningWay learningWay)
         {
             if (Status != TeacherStatus.Idles) throw new InvalidOperationException();
-            
-            if(!CurrentPack.CanLearningWay(learningWay))
-                throw new ArgumentException($"The deck does not support {learningWay} learning method.");
-            
+
             Status = TeacherStatus.ReceivingFaceСard;
             CurrentIndex = 0;
             CurrentLearningWay = learningWay;
@@ -40,25 +38,24 @@ namespace GodnessChatBot
         public List<string> GetPossibleAnswers()
         {
             if (Status != TeacherStatus.WaitingAnswer) throw new InvalidOperationException();
+            Status = TeacherStatus.ReceivingBackCard;
 
             return CurrentLearningWay.SendPossibleAnswers();
         }
 
-        public void MakeStatisticByAnswerResult(string answer)
+        public string MakeStatisticByAnswerResult(string message)
         {
             if (Status != TeacherStatus.ReceivingBackCard) throw new InvalidOperationException();
 
-            if (CurrentLearningWay.GetAnswer(answer) == "Верно!")
+            if (CurrentLearningWay.GetAnswer(out var answer, message))
                 CurrentPack[CurrentIndex].Statistic++;
             else 
                 CurrentPack[CurrentIndex].Statistic--;
-            
-            CurrentIndex = CurrentPack.Cards.OrderBy(x => x.Statistic)
-                .Where(x => x.Statistic < 10)
-                .Select(x => x.Statistic)
-                .FirstOrDefault();
+
+            CurrentIndex = (CurrentIndex + 1) % CurrentPack.Cards.Count; 
             
             Status = TeacherStatus.ReceivingFaceСard;
+            return answer;
         }
     }
 }

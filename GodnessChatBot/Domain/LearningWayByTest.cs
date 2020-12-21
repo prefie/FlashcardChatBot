@@ -34,9 +34,12 @@ namespace GodnessChatBot
                 .ToList();
         }
 
-        public string GetAnswer(string answer)
-            => Pack[CardIndex].Back == answer 
-                ? "Верно!" 
+        public bool GetAnswer(out string answer, string message)
+        {
+             answer = String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
+                ? "Верно!"
                 : $"Неверно :(\nПравильный ответ: {Pack[CardIndex].Back}";
+             return String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase);
+        }
     }
 }

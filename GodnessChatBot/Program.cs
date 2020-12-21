@@ -4,12 +4,11 @@ namespace GodnessChatBot
 {
     internal class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         { 
-            var repository = new TeachersRepository();
-            // Bot.Start();
-            // Console.ReadKey();
-            // Bot.Stop();
+            Bot.Start();
+            Console.ReadKey();
+            Bot.Stop();
         }
     }
 }

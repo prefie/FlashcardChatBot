@@ -43,7 +43,7 @@ namespace GodnessChatBot
             
             var pack = new Pack(packName, false);
 
-            if (table == null) return null;
+            if (table == null || table.Count < 2) return null;
             for (var i = 1; i < table.Count; i++)
             {
                 if (table[i].Count != 3) continue;
