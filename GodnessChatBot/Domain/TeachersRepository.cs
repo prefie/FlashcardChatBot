@@ -32,6 +32,7 @@ namespace GodnessChatBot
             usersSheetTitle = "Users";
             
             var credential = GetSheetCredentials();
+            
             sheetsService = GetSheetsService(credential);
             driveService = GetDriveService(credential);
         }
