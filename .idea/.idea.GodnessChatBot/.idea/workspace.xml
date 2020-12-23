@@ -19,15 +19,19 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:Logic" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="879fde51-0df5-4752-8121-ebb977e0b2b6" name="Default Changelist" comment="Add parser">
+    <list default="true" id="879fde51-0df5-4752-8121-ebb977e0b2b6" name="Default Changelist" comment="исправил багу с индексом">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GodnessChatBot/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GodnessChatBot/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GodnessChatBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GodnessChatBot/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GodnessChatBot/Domain/Card.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GodnessChatBot/Domain/Card.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GodnessChatBot/Domain/Teacher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GodnessChatBot/Domain/Teacher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GodnessChatBot/GodnessChatBot.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/GodnessChatBot/GodnessChatBot.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GodnessChatBot/obj/Debug/GodnessChatBot.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/GodnessChatBot/obj/Debug/GodnessChatBot.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +39,20 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Logic" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/GodnessChatBot/Domain/Teacher.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/GodnessChatBot/Bot.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/dasha/OneDrive/Рабочий стол/GodnessChatBot/GodnessChatBot/Domain/ILearningWay.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/GodnessChatBot/Domain/TeachersRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/GodnessChatBot/Domain/TeacherStatus.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/GodnessChatBot/Program.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -53,13 +70,17 @@
         <option value="$PROJECT_DIR$/GodnessChatBot/Pack.cs" />
         <option value="$PROJECT_DIR$/GodnessChatBot/packages.config" />
         <option value="$PROJECT_DIR$/GodnessChatBot/TeachersRepository.cs" />
-        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/Teacher.cs" />
         <option value="$PROJECT_DIR$/GodnessChatBot/Domain/LeaningWayByTest.cs" />
         <option value="$PROJECT_DIR$/GodnessChatBot/Domain/Card.cs" />
+        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/Category.cs" />
+        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/TeachersRepository.cs" />
+        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/Pack.cs" />
+        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/ILearningWay.cs" />
+        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/LearningWayByTest.cs" />
+        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/LearningWay.cs" />
         <option value="$PROJECT_DIR$/GodnessChatBot/Domain/LearningWayByTyping.cs" />
         <option value="$PROJECT_DIR$/GodnessChatBot/Domain/LearningWayCheckYourself.cs" />
-        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/LearningWayByTest.cs" />
-        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/ILearningWay.cs" />
+        <option value="$PROJECT_DIR$/GodnessChatBot/Domain/Teacher.cs" />
       </list>
     </option>
   </component>
@@ -178,7 +199,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604833988435</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="First logic attempt.">
+      <created>1608566864722</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1608566864722</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,7 +219,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="Logic" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -206,7 +246,8 @@
     <MESSAGE value="Добавил инициализацию бота, костяк для БД - Google таблица" />
     <MESSAGE value="Add parser" />
     <MESSAGE value="Балуюсь" />
-    <option name="LAST_COMMIT_MESSAGE" value="Балуюсь" />
+    <MESSAGE value="First logic attempt." />
+    <option name="LAST_COMMIT_MESSAGE" value="First logic attempt." />
   </component>
   <component name="WindowStateProjectService">
     <state x="561" y="257" key="#Notifications" timestamp="1604831689866">
@@ -329,22 +370,25 @@
     </state>
     <state width="1877" height="360" key="GridCell.Tab.4.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604756700731" />
     <state width="1406" height="358" key="GridCell.Tab.4.right/87.0.1449.864@87.0.1449.864" timestamp="1604831787346" />
-    <state x="640" y="118" key="RiderGenerateDialog" timestamp="1608474101980">
-      <screen x="87" y="0" width="1449" height="864" />
+    <state x="489" y="0" key="RiderGenerateDialog" timestamp="1608552930846">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
+    <state x="489" y="0" key="RiderGenerateDialog/0.0.1280.680@0.0.1280.680" timestamp="1608552930846" />
     <state x="640" y="118" key="RiderGenerateDialog/87.0.1449.864@87.0.1449.864" timestamp="1608474101980" />
-    <state x="504" y="210" key="Vcs.Push.Dialog.v2" timestamp="1604834011904">
-      <screen x="87" y="0" width="1449" height="864" />
+    <state x="368" y="139" key="Vcs.Push.Dialog.v2" timestamp="1608566937914">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
+    <state x="368" y="139" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1608566937914" />
     <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604753057651" />
     <state x="504" y="210" key="Vcs.Push.Dialog.v2/87.0.1449.864@87.0.1449.864" timestamp="1604834011904" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1604753612218">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1604753612218" />
-    <state x="630" y="346" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1608471856125">
-      <screen x="87" y="0" width="1449" height="864" />
+    <state x="480" y="272" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1608724315853">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
+    <state x="480" y="272" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680@0.0.1280.680" timestamp="1608724315853" />
     <state x="630" y="346" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/87.0.1449.864@87.0.1449.864" timestamp="1608471856125" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1603619010308">
       <screen x="0" y="0" width="1920" height="1040" />
