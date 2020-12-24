@@ -7,7 +7,7 @@ namespace GodnessChatBot
     public class Teacher
     {
         public TeacherStatus Status { get; private set; }
-        private Pack CurrentPack;
+        public Pack CurrentPack;
         private int CurrentIndex;
         private ILearningWay CurrentLearningWay;
 
