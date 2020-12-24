@@ -10,7 +10,7 @@ namespace GodnessChatBot
     {
         public abstract string Name { get; set; }
 
-        public abstract void Execute(Message message, TelegramBotClient client);
+        public abstract void Execute(Message message, TelegramBotClient client); //TODO принимаем тичера
 
         public bool Contains(string command)
         {
