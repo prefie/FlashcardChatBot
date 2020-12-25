@@ -38,10 +38,10 @@ namespace GodnessChatBot.Domain.LearningWays
 
         public bool? GetAnswer(out string answer, string message)
         {
-             answer = String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
+             answer = string.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
                 ? "Верно!"
                 : $"Неверно :(\nПравильный ответ: {Pack[CardIndex].Back}";
-             return String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase);
+             return string.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

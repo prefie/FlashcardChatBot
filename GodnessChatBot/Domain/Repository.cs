@@ -55,7 +55,7 @@ namespace GodnessChatBot.Domain
             return pack;
         }
 
-        public static void UpdateStatisticsPack(string userId, Pack pack)
+        public static void UpdatePackStatistics(string userId, Pack pack)
         {
             var spreadsheetId = GetSpreadsheetId(userId);
             var cards = pack.Cards.ToDictionary(card => (card.Face, card.Back));
@@ -255,8 +255,7 @@ namespace GodnessChatBot.Domain
         {
             try
             {
-                var values = SheetsService.Spreadsheets.Values.Get(spreadsheetId, sheetName).Execute();
-                return values;
+                return SheetsService.Spreadsheets.Values.Get(spreadsheetId, sheetName).Execute();
             }
             catch (Exception)
             {

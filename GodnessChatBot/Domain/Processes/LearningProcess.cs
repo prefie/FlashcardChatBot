@@ -88,7 +88,7 @@ namespace GodnessChatBot.Domain.Processes
             if (pack == null)
                 return new Information(new List<string> {"Вызови команду /создать"});
             
-            Repository.UpdateStatisticsPack(id, learningWay.Pack);
+            Repository.UpdatePackStatistics(id, learningWay.Pack);
             return new Information(new List<string> {"Отличная тренировка!"});
         }
     }
