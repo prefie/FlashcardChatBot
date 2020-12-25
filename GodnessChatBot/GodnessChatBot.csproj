@@ -124,7 +124,7 @@
         <Compile Include="Domain\LearningWays\LearningWayByTest.cs" />
         <Compile Include="Domain\LearningWays\LearningWayByTyping.cs" />
         <Compile Include="Domain\LearningWays\LearningWayCheckYourself.cs" />
-        <Compile Include="Domain\Message.cs" />
+        <Compile Include="Domain\Information.cs" />
         <Compile Include="Domain\Pack.cs" />
         <Compile Include="Domain\Processes\CreationProcess.cs" />
         <Compile Include="Domain\Processes\LearningProcess.cs" />

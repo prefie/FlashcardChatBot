@@ -17,20 +17,22 @@ namespace GodnessChatBot
                 {
                     new[]
                     {
-                        new KeyboardButton("Создать"),
-                        new KeyboardButton("Учить")
+                        new KeyboardButton("/Создать"),
+                        new KeyboardButton("/Учить")
                     },
                     new []
                     {
-                        new KeyboardButton("Изменить"),
-                        new KeyboardButton("Отправить")
+                        new KeyboardButton("/Изменить"),
+                        new KeyboardButton("/Отправить")
                     },
                     new []
                     {
-                        new KeyboardButton("Получить ссылку на таблицу")
+                        new KeyboardButton("/Получить ссылку на таблицу")
                     }
                 }, true,
                 true);
+            
+            Bot.teachers[chatId.ToString()] = new Teacher(chatId.ToString());
             await client.SendTextMessageAsync(chatId, "Давай начнем:)", replyMarkup: replyKeyboard);
         }
     }

@@ -6,9 +6,11 @@ namespace GodnessChatBot
 {
     public class LearningWayByTest : ILearningWay
     {
-        public string Name { get; set; }
+        public string Name => "Тест";
         public Pack Pack { get; set; }
         private int CardIndex { get; set; }
+        
+        public LearningWayByTest() {}
 
         public LearningWayByTest(Pack pack)
         {

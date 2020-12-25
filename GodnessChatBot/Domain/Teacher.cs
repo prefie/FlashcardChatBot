@@ -7,17 +7,21 @@ namespace GodnessChatBot
     public class Teacher
     {
         private string id;
-        public IProcess Process { get; }  
+        private IProcess Process { get; }
 
-        public Teacher(string id, IProcess process)
+        public Teacher(string id, IProcess process=null)
         {
             this.id = id;
             Process = process;
         }
 
-        public Telegramma CheckStatusAndReturnAnswer()
+        public Information CheckStatusAndReturnAnswer(string message)
         {
-            return new Telegramma(null);
+            return Process == null
+                ? new Information(new List<string> {"Я такого не знаю :("})
+                : Process.Execute(id, message);
         }
+
+        public Information FinishProcess() => Process.Finish(id);
     }
 }

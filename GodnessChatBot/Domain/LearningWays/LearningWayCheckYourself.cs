@@ -4,13 +4,11 @@ namespace GodnessChatBot
 {
     public class LearningWayCheckYourself : ILearningWay
     {
-        public string Name { get; set; }
+        public string Name => "Самопроверка";
         public Pack Pack { get; set; }
         private int CardIndex { get; set; }
         
-        public LearningWayCheckYourself()
-        {
-        }
+        public LearningWayCheckYourself() {}
         
         public LearningWayCheckYourself(Pack pack)
         {

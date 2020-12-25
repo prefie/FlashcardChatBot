@@ -2,18 +2,18 @@
 
 namespace GodnessChatBot
 {
-    public class Telegramma
+    public class Information
     {
         public List<string> Messages { get; }
         public List<string> AdditionalInfo { get; }
 
-        public Telegramma(List<string> messages, List<string> additionalInfo)
+        public Information(List<string> messages, List<string> additionalInfo)
         {
             Messages = messages;
             AdditionalInfo = additionalInfo;
         }
 
-        public Telegramma(List<string> messages)
+        public Information(List<string> messages)
         {
             Messages = messages;
             AdditionalInfo = new List<string>();

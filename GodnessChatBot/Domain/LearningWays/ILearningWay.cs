@@ -4,7 +4,7 @@ namespace GodnessChatBot
 {
     public interface ILearningWay
     {
-        string Name { get; set; }
+        string Name { get; }
         Pack Pack { get; set; }
         string SendQuestion(int cardIndex);
         List<string> SendPossibleAnswers();

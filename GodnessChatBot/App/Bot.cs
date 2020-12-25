@@ -15,10 +15,6 @@ namespace GodnessChatBot
         private static readonly TelegramBotClient bot;
         private static readonly List<Command> Commands = new List<Command>();
         public static Dictionary<string, Teacher> teachers = new Dictionary<string, Teacher>();
-        private static bool isAskedPack;
-        private static bool isLearningPack;
-        private static bool isPackName;
-        private static bool isPackCreation;
 
         static Bot()
         {
@@ -41,9 +37,13 @@ namespace GodnessChatBot
 
         public static void Stop() => bot.StopReceiving();
 
-        private static void BotOnMessage(object sender, MessageEventArgs e)
+        private static async void BotOnMessage(object sender, MessageEventArgs e)
         {
             var message = e.Message;
+            var userId = message.From.Id.ToString();
+            
+            if (!teachers.ContainsKey(userId))
+                teachers.Add(userId, new Teacher(userId));
             
             //TODO : delete this
             Console.WriteLine($"{message.From.FirstName} {message.From.LastName} отправил сообщение боту: {message.Text}");
@@ -53,13 +53,24 @@ namespace GodnessChatBot
                 if (command.Contains(message.Text))
                 {
                     command.Execute(message, bot);
-                    break;
+                    return;
                 }
             }
+
+            var answer = teachers[message.From.Id.ToString()].CheckStatusAndReturnAnswer(message.Text);
+
+            for (var i = 0; i < answer.Messages.Count - 1; i++)
+                await bot.SendTextMessageAsync(message.From.Id, answer.Messages[i]);
+
+            var last = answer.Messages[answer.Messages.Count - 1];
             
+            answer.AdditionalInfo.Add("Завершить");
+            var buttons = GetButtons(answer.AdditionalInfo);
+
+            await bot.SendTextMessageAsync(message.From.Id, last, replyMarkup: buttons);
+
             // TODO: teachers[userId].checkStatusAndReturnAnswer() проверяем в каком процессе находимся
             // если учимся или создаем, возвращает нужный ответ, иначе "Я не понял тебя"
-            
         }
 
         private static InlineKeyboardMarkup GetButtons(List<string> headers)
@@ -79,8 +90,38 @@ namespace GodnessChatBot
         
         private static async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs e)
         {
-            // var callbackQuery = e.CallbackQuery;
-            // var userId = callbackQuery.From.Id.ToString();
+            var callbackQuery = e.CallbackQuery;
+            var userId = callbackQuery.From.Id.ToString();
+            
+            await bot.EditMessageReplyMarkupAsync(e.CallbackQuery.Message.Chat.Id,
+                e.CallbackQuery.Message.MessageId);
+
+            if (!teachers.ContainsKey(userId))
+            {
+                await bot.SendTextMessageAsync(callbackQuery.From.Id, "Никакой процесс не запущен, начни сначала :(");
+                return;
+            }
+
+            if (callbackQuery.Data == "Завершить" || callbackQuery.Data == "Закончить обучение")
+            {
+                var messages = teachers[userId].FinishProcess().Messages;
+                foreach (var answerMessage in messages)
+                    await bot.SendTextMessageAsync(callbackQuery.From.Id, answerMessage);
+                return;
+            }
+            
+            var answer = teachers[callbackQuery.From.Id.ToString()].CheckStatusAndReturnAnswer(callbackQuery.Data);
+
+            for (var i = 0; i < answer.Messages.Count - 1; i++)
+                await bot.SendTextMessageAsync(callbackQuery.From.Id, answer.Messages[i]);
+
+            var last = answer.Messages[answer.Messages.Count - 1];
+            
+            answer.AdditionalInfo.Add("Завершить");
+            var buttons = GetButtons(answer.AdditionalInfo);
+
+            await bot.SendTextMessageAsync(callbackQuery.From.Id, last, replyMarkup: buttons);
+            
             //
             // if (callbackQuery.Data == "Завершить") //TODO command
             // {
@@ -130,16 +171,6 @@ namespace GodnessChatBot
             //         replyMarkup:GetButtons(options));
             // }
             //
-            // await bot.EditMessageReplyMarkupAsync(e.CallbackQuery.Message.Chat.Id,
-            //     e.CallbackQuery.Message.MessageId);
-        }
-
-        private static void UpdateStatus()
-        {
-            isAskedPack = false;
-            isPackCreation = false;
-            isPackName = false;
-            isLearningPack = false;
         }
     }
 }

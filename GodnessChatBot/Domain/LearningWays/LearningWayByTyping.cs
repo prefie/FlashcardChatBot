@@ -5,9 +5,11 @@ namespace GodnessChatBot
 {
     public class LearningWayByTyping : ILearningWay
     {
-        public string Name { get; set; }
+        public string Name => "Ввод ответа";
         public Pack Pack { get; set; }
         private int CardIndex { get; set; }
+        
+        public LearningWayByTyping() {}
         
         public LearningWayByTyping(Pack pack)
         {
