@@ -63,7 +63,13 @@ namespace GodnessChatBot.Domain.Processes
             else
             {
                 var result = learningWay.GetAnswer(out var answer, message);
-                if (result)
+                if (result == null)
+                {
+                    var quest = learningWay.SendQuestion(currentIndex);
+                    var ans = learningWay.SendPossibleAnswers();
+                    return new Information(new List<string>{quest}, ans);
+                }
+                if (result == true)
                     learningWay.Pack[currentIndex].Statistic++;
                 else
                     learningWay.Pack[currentIndex].Statistic--;

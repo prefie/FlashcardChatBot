@@ -36,7 +36,7 @@ namespace GodnessChatBot.Domain.LearningWays
                 .ToList();
         }
 
-        public bool GetAnswer(out string answer, string message)
+        public bool? GetAnswer(out string answer, string message)
         {
              answer = String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
                 ? "Верно!"

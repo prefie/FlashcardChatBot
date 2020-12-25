@@ -3,24 +3,22 @@ using System.Collections.Generic;
 
 namespace GodnessChatBot.Domain.Processes
 {
-    public class CreationProcess : IProcess
+    public class AdditionProcess : IProcess
     {
-        private CreationEnum status = CreationEnum.Start;
+        private AdditionEnum status = AdditionEnum.Start;
         private string name;
 
         public Information Execute(string id, string message)
         {
-            if (status == CreationEnum.Start)
+            if (status == AdditionEnum.Start)
             {
-                if (status != CreationEnum.Start)
+                if (status != AdditionEnum.Start)
                     throw new InvalidOperationException();
             
                 name = message;
-                var pack = new Pack(name, new Card[] { });
-                Repository.AddPack(id, pack);
-                status = CreationEnum.Execute;
+                status = AdditionEnum.Execute;
                 return new Information(new List<string> 
-                { @"Отлично! Давай начнем создавать колоду)
+                { @"Давай начнем добавлять карты в колоду)
 Отправь мне карту одним сообщением в формате:
 передняя сторона
 задняя сторона" });
@@ -44,7 +42,7 @@ namespace GodnessChatBot.Domain.Processes
         }
     }
 
-    public enum CreationEnum
+    public enum AdditionEnum
     {
         Start,
         Execute

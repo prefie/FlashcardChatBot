@@ -8,6 +8,6 @@ namespace GodnessChatBot.Domain.LearningWays
         Pack Pack { get; set; }
         string SendQuestion(int cardIndex);
         List<string> SendPossibleAnswers();
-        bool GetAnswer(out string answer, string message);
+        bool? GetAnswer(out string answer, string message);
     }
 }

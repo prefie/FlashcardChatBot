@@ -23,7 +23,7 @@ namespace GodnessChatBot.App
             Commands.Add(new LearnCommand());
             Commands.Add(new SendPackCommand());
             Commands.Add(new SendTableCommand());
-            Commands.Add(new ChangePackCommand());
+            Commands.Add(new AdditionCommand());
         }
 
         public static void Start()

@@ -23,7 +23,7 @@ namespace GodnessChatBot.App.Commands
                     },
                     new []
                     {
-                        new KeyboardButton("/Изменить"),
+                        new KeyboardButton("/Добавить карту в колоду"),
                         new KeyboardButton("/Отправить")
                     },
                     new []
@@ -34,7 +34,7 @@ namespace GodnessChatBot.App.Commands
                 true);
             
             TelegramBot.Teachers[chatId.ToString()] = new Teacher(chatId.ToString());
-            await client.SendTextMessageAsync(chatId, "Давай начнем:)", replyMarkup: replyKeyboard);
+            await client.SendTextMessageAsync(chatId, "Давай начнем :)", replyMarkup: replyKeyboard);
         }
     }
 }
