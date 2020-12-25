@@ -13,17 +13,17 @@ using Google.Apis.Util.Store;
 
 namespace GodnessChatBot
 {
-    internal class TeachersRepository
+    public static class Repository
     {
-        private readonly string client;
-        private readonly string[] scopes;
-        private readonly string appName;
-        private readonly string usersSpreadsheetId;
-        private readonly string usersSheetTitle;
-        private readonly SheetsService sheetsService;
-        private readonly DriveService driveService;
+        private static readonly string client;
+        private static readonly string[] scopes;
+        private static readonly string appName;
+        private static readonly string usersSpreadsheetId;
+        private static readonly string usersSheetTitle;
+        private static readonly SheetsService sheetsService;
+        private static readonly DriveService driveService;
 
-        internal TeachersRepository()
+        static Repository()
         {
             client = "credentials.json";
             scopes = new []{DriveService.Scope.Drive, SheetsService.Scope.Spreadsheets};
@@ -37,7 +37,7 @@ namespace GodnessChatBot
             driveService = GetDriveService(credential);
         }
 
-        public Pack GetPack(string userId, string packName)
+        public static Pack GetPack(string userId, string packName)
         {
             var spreadsheetId = GetSpreadsheetId(userId);
             var table = GetValuesSheet(spreadsheetId, packName)?.Values;
@@ -55,7 +55,7 @@ namespace GodnessChatBot
             return pack;
         }
 
-        public void UpdateStatisticsPack(string userId, Pack pack)
+        public static void UpdateStatisticsPack(string userId, Pack pack)
         {
             var spreadsheetId = GetSpreadsheetId(userId);
             var cards = pack.Cards.ToDictionary(card => (card.Face, card.Back));
@@ -77,14 +77,14 @@ namespace GodnessChatBot
             UpdateValuesTable(table, spreadsheetId, table.Range);
         }
 
-        public IEnumerable<string> GetPacksNames(string userId)
+        public static IEnumerable<string> GetPacksNames(string userId)
         {
             var spreadsheetId = GetSpreadsheetId(userId);
             var spreadsheet = sheetsService.Spreadsheets.Get(spreadsheetId).Execute();
             return spreadsheet?.Sheets.Select(x => x.Properties.Title);
         }
 
-        public void CreateSpreadsheet(string userId)
+        public static void CreateSpreadsheet(string userId)
         {
             if (GetSpreadsheetId(userId) != null)
                 return;
@@ -107,7 +107,7 @@ namespace GodnessChatBot
             AddUserInSpreadsheet(userId, spreadsheet.SpreadsheetId, spreadsheet.SpreadsheetUrl);
         }
 
-        public string GetSpreadsheetUrl(string userId)
+        public static string GetSpreadsheetUrl(string userId)
         {
             var table = GetValuesSheet(usersSpreadsheetId, usersSheetTitle)?.Values;
 
@@ -123,16 +123,16 @@ namespace GodnessChatBot
             return null;
         }
 
-        public void AddPack(string userId, Pack pack) => CreateNewSheet(userId, pack.Name);
+        public static void AddPack(string userId, Pack pack) => CreateNewSheet(userId, pack.Name);
 
-        public void AddCardInPack(string userId, string packName, Card card)
+        public static void AddCardInPack(string userId, string packName, Card card)
         {
             IList<object> data = new object[] {card.Face, card.Back, card.Statistic.ToString()};
             var spreadsheetId = GetSpreadsheetId(userId);
             AddDataToEndOfSheet(spreadsheetId, packName, data);
         }
 
-        public void RemoveCardFromPack(string userId, string packName, Card card)
+        public static void RemoveCardFromPack(string userId, string packName, Card card)
         {
             var spreadsheetId = GetSpreadsheetId(userId);
             var table = GetValuesSheet(spreadsheetId, packName);
@@ -153,10 +153,10 @@ namespace GodnessChatBot
             UpdateValuesTable(table, spreadsheetId, table.Range);
         }
 
-        private void AddUserInSpreadsheet(string userId, string spreadsheetId, string url) =>
+        private static void AddUserInSpreadsheet(string userId, string spreadsheetId, string url) =>
             AddDataToEndOfSheet(usersSpreadsheetId, usersSheetTitle, new object[] {userId, spreadsheetId, url});
         
-        private string GetSpreadsheetId(string userId)
+        private static string GetSpreadsheetId(string userId)
         {
             var table = GetValuesSheet(usersSpreadsheetId, usersSheetTitle)?.Values;
 
@@ -173,14 +173,14 @@ namespace GodnessChatBot
             return null;
         }
         
-        private void UpdateValuesTable(ValueRange values, string spreadsheetId, string range)
+        private static void UpdateValuesTable(ValueRange values, string spreadsheetId, string range)
         {
             var request = sheetsService.Spreadsheets.Values.Update(values, spreadsheetId, range);
             request.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
             request.Execute();
         }
         
-        private SheetsService GetSheetsService(UserCredential credential)
+        private static SheetsService GetSheetsService(UserCredential credential)
         {
             return new SheetsService(new BaseClientService.Initializer
             {
@@ -189,7 +189,7 @@ namespace GodnessChatBot
             });
         }
         
-        private DriveService GetDriveService(UserCredential credential)
+        private static DriveService GetDriveService(UserCredential credential)
         {
             return new DriveService(new BaseClientService.Initializer
             {
@@ -198,7 +198,7 @@ namespace GodnessChatBot
             });
         }
 
-        private UserCredential GetSheetCredentials()
+        private static UserCredential GetSheetCredentials()
         {
             using (var stream = new FileStream(client, FileMode.Open, FileAccess.Read))
             {
@@ -212,7 +212,7 @@ namespace GodnessChatBot
             }
         }
         
-        private void AddDataToEndOfSheet(string spreadsheetId, string sheetName, IList<object> data)
+        private static void AddDataToEndOfSheet(string spreadsheetId, string sheetName, IList<object> data)
         {
             var table = GetValuesSheet(spreadsheetId, sheetName);
             if (table.Values == null)
@@ -223,7 +223,7 @@ namespace GodnessChatBot
             UpdateValuesTable(table, spreadsheetId, table.Range);
         }
 
-        private void CreateNewSheet(string userId, string sheetName)
+        private static void CreateNewSheet(string userId, string sheetName)
         {
             var spreadsheetId = GetSpreadsheetId(userId);
             
@@ -251,7 +251,7 @@ namespace GodnessChatBot
             }
         }
 
-        private ValueRange GetValuesSheet(string spreadsheetId, string sheetName)
+        private static ValueRange GetValuesSheet(string spreadsheetId, string sheetName)
         {
             try
             {
