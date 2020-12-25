@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.Domain.LearningWays
 {
     public class LearningWayByTyping : ILearningWay
     {
-        public string Name { get; set; }
+        public string Name => "Ввод ответа";
         public Pack Pack { get; set; }
         private int CardIndex { get; set; }
+        
+        public LearningWayByTyping() {}
         
         public LearningWayByTyping(Pack pack)
         {
@@ -25,12 +27,12 @@ namespace GodnessChatBot
             return new List<string>();
         }
 
-        public bool GetAnswer(out string answer, string message)
+        public bool? GetAnswer(out string answer, string message)
         {
-            answer = String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
+            answer = string.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
                 ? "Верно!"
                 : $"Неверно :(\nПравильный ответ: {Pack[CardIndex].Back}";
-            return String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase);
+            return string.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

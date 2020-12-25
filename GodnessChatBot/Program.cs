@@ -1,14 +1,15 @@
 ﻿using System;
+using GodnessChatBot.App;
 
 namespace GodnessChatBot
 {
-    internal class Program
+    internal static class Program
     {
         public static void Main()
         { 
-            Bot.Start();
+            TelegramBot.Start();
             Console.ReadKey();
-            Bot.Stop();
+            TelegramBot.Stop();
         }
     }
 }

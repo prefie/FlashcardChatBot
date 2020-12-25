@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.Domain
 {
     public class Pack
     {
@@ -10,22 +9,17 @@ namespace GodnessChatBot
         private List<Card> cards;
         public IReadOnlyList<Card> Cards => cards.AsReadOnly();
 
-        public bool CanReverse { get; private set; }
-
         public Pack(
             string name,
-            IEnumerable<Card> cards,
-            bool canReverse)
+            IEnumerable<Card> cards)
         {
             Name = name;
-            CanReverse = canReverse;
             this.cards = cards.ToList();
         }
 
-        public Pack(string name, bool canReverse)
+        public Pack(string name)
         {
             Name = name;
-            CanReverse = canReverse;
             cards = new List<Card>();
         }
 
@@ -36,7 +30,7 @@ namespace GodnessChatBot
         public bool RemoveCard(Card card) => cards.Remove(card);
         public void Rename(string name) => Name = name;
 
-        public Pack Share() => new Pack(Name, Cards, CanReverse);
+        public Pack Share() => new Pack(Name, Cards);
         
         public override int GetHashCode() => Name.GetHashCode();
 

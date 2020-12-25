@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.Domain.LearningWays
 {
     public class LearningWayByTest : ILearningWay
     {
-        public string Name { get; set; }
+        public string Name => "Тест";
         public Pack Pack { get; set; }
         private int CardIndex { get; set; }
+        
+        public LearningWayByTest() {}
 
         public LearningWayByTest(Pack pack)
         {
@@ -34,7 +36,7 @@ namespace GodnessChatBot
                 .ToList();
         }
 
-        public bool GetAnswer(out string answer, string message)
+        public bool? GetAnswer(out string answer, string message)
         {
              answer = String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
                 ? "Верно!"
