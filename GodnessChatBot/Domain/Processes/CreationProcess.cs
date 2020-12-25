@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.Domain.Processes
 {
     public class CreationProcess : IProcess
     {

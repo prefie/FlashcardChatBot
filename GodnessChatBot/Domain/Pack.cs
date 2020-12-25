@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.Domain
 {
     public class Pack
     {
@@ -18,7 +17,7 @@ namespace GodnessChatBot
             this.cards = cards.ToList();
         }
 
-        public Pack(string name, bool canReverse)
+        public Pack(string name)
         {
             Name = name;
             cards = new List<Card>();

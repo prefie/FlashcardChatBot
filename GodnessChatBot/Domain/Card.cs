@@ -1,4 +1,4 @@
-﻿namespace GodnessChatBot
+﻿namespace GodnessChatBot.Domain
 {
     public class Card
     {

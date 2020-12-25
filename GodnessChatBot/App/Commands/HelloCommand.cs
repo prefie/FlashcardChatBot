@@ -1,12 +1,13 @@
-﻿using Telegram.Bot;
+﻿using GodnessChatBot.Domain;
+using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.App.Commands
 {
     public class HelloCommand : Command
     {
-        public override string Name { get; set; } = "/start";
+        public override string Name => "/start";
         
         public override async void Execute(Message message, TelegramBotClient client)
         {
@@ -32,7 +33,7 @@ namespace GodnessChatBot
                 }, true,
                 true);
             
-            Bot.teachers[chatId.ToString()] = new Teacher(chatId.ToString());
+            TelegramBot.Teachers[chatId.ToString()] = new Teacher(chatId.ToString());
             await client.SendTextMessageAsync(chatId, "Давай начнем:)", replyMarkup: replyKeyboard);
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.Domain.LearningWays
 {
     public class LearningWayCheckYourself : ILearningWay
     {

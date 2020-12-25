@@ -110,7 +110,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="App\AppSettings.cs" />
-        <Compile Include="App\Bot.cs" />
+        <Compile Include="App\TelegramBot.cs" />
         <Compile Include="App\Commands\ChangePackCommand.cs" />
         <Compile Include="App\Commands\Command.cs" />
         <Compile Include="App\Commands\CreateCommand.cs" />
@@ -131,7 +131,6 @@
         <Compile Include="Domain\Processes\IProcess.cs" />
         <Compile Include="Domain\Teacher.cs" />
         <Compile Include="Domain\Repository.cs" />
-        <Compile Include="Domain\TeacherStatus.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

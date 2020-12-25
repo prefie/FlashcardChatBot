@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.Domain.LearningWays
 {
     public class LearningWayByTyping : ILearningWay
     {

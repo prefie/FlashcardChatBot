@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GodnessChatBot.Domain.LearningWays;
 
-namespace GodnessChatBot
+namespace GodnessChatBot.Domain.Processes
 {
     public class LearningProcess : IProcess
     {
         private LearningEnum status = LearningEnum.Idles;
-        private HashSet<ILearningWay> learningWays;
+        private readonly HashSet<ILearningWay> learningWays;
         
         private Pack pack;
         private ILearningWay learningWay;
-        private int CurrentIndex;
+        private int currentIndex;
 
         public LearningProcess()
         {
@@ -52,8 +53,8 @@ namespace GodnessChatBot
                     throw new ArgumentException();
                 
                 learningWay.Pack = pack;
-                CurrentIndex = 0;
-                var question = learningWay.SendQuestion(CurrentIndex);
+                currentIndex = 0;
+                var question = learningWay.SendQuestion(currentIndex);
                 var answers = learningWay.SendPossibleAnswers();
                 status = LearningEnum.Execute;
             
@@ -63,13 +64,13 @@ namespace GodnessChatBot
             {
                 var result = learningWay.GetAnswer(out var answer, message);
                 if (result)
-                    learningWay.Pack[CurrentIndex].Statistic++;
+                    learningWay.Pack[currentIndex].Statistic++;
                 else
-                    learningWay.Pack[CurrentIndex].Statistic--;
+                    learningWay.Pack[currentIndex].Statistic--;
                 
-                CurrentIndex = (CurrentIndex + 1) % learningWay.Pack.Cards.Count;
+                currentIndex = (currentIndex + 1) % learningWay.Pack.Cards.Count;
                 
-                var question = learningWay.SendQuestion(CurrentIndex);
+                var question = learningWay.SendQuestion(currentIndex);
                 var answers = learningWay.SendPossibleAnswers();
                 
                 return new Information(new List<string> {answer, question},answers);
