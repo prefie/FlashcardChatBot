@@ -12,8 +12,10 @@ namespace GodnessChatBot.App.Commands
         {
             var chatId = message.Chat.Id;
             
-            TelegramBot.Teachers[chatId.ToString()] = new Teacher(chatId.ToString(), new CreationProcess());
+            TelegramBot.DialogBranches[chatId.ToString()] = new CreationDialogBranch(repository);
             await client.SendTextMessageAsync(chatId, "Выбери название колоды");
         }
+
+        public CreateCommand(Repository repository) : base(repository) { }
     }
 }

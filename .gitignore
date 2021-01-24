@@ -1,0 +1,5 @@
+﻿.vs/
+**/GodnessChatBot/bin/
+**/GodnessChatBot/obj/
+**/debug
+**/Debug

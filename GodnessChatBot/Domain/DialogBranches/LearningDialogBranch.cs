@@ -5,17 +5,20 @@ using GodnessChatBot.Domain.LearningWays;
 
 namespace GodnessChatBot.Domain.Processes
 {
-    public class LearningProcess : IProcess
+    public class LearningDialogBranch : IDialogBranch
     {
-        private LearningEnum status = LearningEnum.Idles;
+        private LearningDialogBranchState status = LearningDialogBranchState.SelectingPack;
         private readonly HashSet<ILearningWay> learningWays;
         
         private Pack pack;
         private ILearningWay learningWay;
         private int currentIndex;
+        
+        private Repository repository;
 
-        public LearningProcess()
+        public LearningDialogBranch(Repository repository)
         {
+            this.repository = repository;
             learningWays = new HashSet<ILearningWay>
             {
                 new LearningWayByTest(),
@@ -24,21 +27,21 @@ namespace GodnessChatBot.Domain.Processes
             };
         }
 
-        public Information Execute(string id, string message)
+        public ReplyMessage Execute(string id, string message)
         {
-            if (status == LearningEnum.Idles)
+            if (status == LearningDialogBranchState.SelectingPack)
             {
-                pack = Repository.GetPack(id, message);
+                pack = repository.GetPack(id, message);
 
                 if (pack == null)
-                    return new Information(new List<string> { "Этой колоды нет или она пустая :("});
+                    return new ReplyMessage(new List<string> { "Этой колоды нет или она пустая :("});
                 
                 pack.OrderCards();
-                status = LearningEnum.Start;
-                return new Information(new List<string> {"Выбери способ обучения"},
+                status = LearningDialogBranchState.WaitingLearningWay;
+                return new ReplyMessage(new List<string> {"Выбери способ обучения"},
                     learningWays.Select(x => x.Name).ToList());
             }
-            if (status == LearningEnum.Start)
+            if (status == LearningDialogBranchState.WaitingLearningWay)
             {
                 foreach (var way in learningWays)
                 {
@@ -56,9 +59,9 @@ namespace GodnessChatBot.Domain.Processes
                 currentIndex = 0;
                 var question = learningWay.SendQuestion(currentIndex);
                 var answers = learningWay.SendPossibleAnswers();
-                status = LearningEnum.Execute;
+                status = LearningDialogBranchState.Learning;
             
-                return new Information(new List<string> {question},answers);
+                return new ReplyMessage(new List<string> {question},answers);
             }
             else
             {
@@ -67,7 +70,7 @@ namespace GodnessChatBot.Domain.Processes
                 {
                     var quest = learningWay.SendQuestion(currentIndex);
                     var ans = learningWay.SendPossibleAnswers();
-                    return new Information(new List<string>{quest}, ans);
+                    return new ReplyMessage(new List<string>{quest}, ans);
                 }
                 if (result == true)
                     learningWay.Pack[currentIndex].Statistic++;
@@ -79,24 +82,24 @@ namespace GodnessChatBot.Domain.Processes
                 var question = learningWay.SendQuestion(currentIndex);
                 var answers = learningWay.SendPossibleAnswers();
                 
-                return new Information(new List<string> {answer, question},answers);
+                return new ReplyMessage(new List<string> {answer, question},answers);
             }
         }
 
-        public Information Finish(string id)
+        public ReplyMessage Finish(string id)
         {
             if (pack == null)
-                return new Information(new List<string> {"Вызови команду /создать"});
+                return new ReplyMessage(new List<string> {"Вызови команду /создать"});
             
-            Repository.UpdatePackStatistics(id, learningWay.Pack);
-            return new Information(new List<string> {"Отличная тренировка!"});
+            repository.UpdateStatisticsPack(id, learningWay.Pack);
+            return new ReplyMessage(new List<string> {"Отличная тренировка!"});
         }
     }
     
-    public enum LearningEnum
+    public enum LearningDialogBranchState
     {
-        Idles,
-        Start,
-        Execute
+        SelectingPack,
+        WaitingLearningWay,
+        Learning
     }
 }
