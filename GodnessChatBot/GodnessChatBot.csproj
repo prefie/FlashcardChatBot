@@ -131,6 +131,7 @@
         <Compile Include="Domain\DialogBranches\LearningDialogBranch.cs" />
         <Compile Include="Domain\DialogBranches\IDialogBranch.cs" />
         <Compile Include="Domain\Repository.cs" />
+        <Compile Include="Infrastructure\GoogleSpreadsheetsHandler.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

@@ -6,7 +6,7 @@ namespace GodnessChatBot.App.Commands
 {
     public class SendPackCommand : Command
     {
-        public override string Name => "/отправить";
+        public override string Name => "Отправить";
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;

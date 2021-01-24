@@ -48,14 +48,15 @@ namespace GodnessChatBot.App
             //TODO : delete this
             Console.WriteLine($"{message.From.FirstName} {message.From.LastName} отправил сообщение боту: {message.Text}");
 
-            foreach (var command in Commands)
-            {
-                if (command.Equals(message.Text))
+            if (DialogBranches[userId] == null)
+                foreach (var command in Commands)
                 {
-                    command.Execute(message, Bot);
-                    return;
+                    if (command.Equals(message.Text))
+                    {
+                        command.Execute(message, Bot);
+                        return;
+                    }
                 }
-            }
             
             SendMessages(message.From.Id.ToString(), message.Text);
         }
@@ -79,7 +80,8 @@ namespace GodnessChatBot.App
             if (callbackQuery.Data == "Завершить" || callbackQuery.Data == "Закончить обучение")
             {
                 var messages = DialogBranches[userId].Finish(userId).Messages;
-                
+
+                DialogBranches[userId] = null;
                 await Bot.SendTextMessageAsync(callbackQuery.From.Id, messages);
                 return;
             }
@@ -93,13 +95,15 @@ namespace GodnessChatBot.App
                 ? new ReplyMessage(new List<string> {"Я такого не знаю :("})
                 : DialogBranches[id].Execute(id, message);
             
-            answer.ReplyOptions.Add("Завершить");
+            if (DialogBranches[id] != null)
+                answer.ReplyOptions.Add("Завершить");
+            
             var buttons = GetButtons(answer.ReplyOptions);
 
             await Bot.SendTextMessageAsync(id, answer.Messages, replyMarkup: buttons);
         }
         
-        public static InlineKeyboardMarkup GetButtons(List<string> headers)
+        public static IReplyMarkup GetButtons(List<string> headers)
         {
             var buttons = new InlineKeyboardButton[headers.Count][];
             

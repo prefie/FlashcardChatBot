@@ -34,7 +34,7 @@ namespace GodnessChatBot.Domain.Processes
                 pack = repository.GetPack(id, message);
 
                 if (pack == null)
-                    return new ReplyMessage(new List<string> { "Этой колоды нет или она пустая :("});
+                    return new ReplyMessage(new List<string> {"Этой колоды нет, она пустая или там ошибка, проверь таблицу:("});
                 
                 pack.OrderCards();
                 status = LearningDialogBranchState.WaitingLearningWay;
