@@ -3,36 +3,36 @@ using System.Collections.Generic;
 
 namespace GodnessChatBot.Domain.LearningWays
 {
-    public class LearningWayByTyping : ILearningWay
+    public class LearningWayByTyping : LearningWay
     {
-        public string Name => "Ввод ответа";
-        public Pack Pack { get; set; }
-        private int CardIndex { get; set; }
-        
-        public LearningWayByTyping() {}
-        
-        public LearningWayByTyping(Pack pack)
-        {
-            Pack = pack;
-        }
-        
-        public string SendQuestion(int cardIndex)
-        {
-            CardIndex = cardIndex;
-            return Pack[CardIndex].Face;
-        }
+        public override string Name => "Ввод ответа";
+        private LearningByTypingState state = LearningByTypingState.WaitingQuestion;
 
-        public List<string> SendPossibleAnswers()
+        public LearningWayByTyping() => NeedNextCard = true;
+        
+        public override ReplyMessage Learn(Card card, Pack pack, string message)
         {
-            return new List<string>();
-        }
+            if (state == LearningByTypingState.WaitingQuestion)
+            {
+                var question = card.Face;
+                state = LearningByTypingState.WaitingResult;
+                return new ReplyMessage(new List<string> {question});
+            }
 
-        public bool? GetAnswer(out string answer, string message)
-        {
-            answer = string.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
+            var result = string.Equals(card.Back, message, StringComparison.CurrentCultureIgnoreCase);
+            var answer = result
                 ? "Верно!"
-                : $"Неверно :(\nПравильный ответ: {Pack[CardIndex].Back}";
-            return string.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase);
+                : $"Неверно :(\nПравильный ответ: {card.Back}";
+            
+            CalculateStatistic(card, result);
+            state = LearningByTypingState.WaitingQuestion;
+            return new ReplyMessage(new List<string> {answer});
         }
+    }
+
+    public enum LearningByTypingState
+    {
+        WaitingQuestion,
+        WaitingResult
     }
 }

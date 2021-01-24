@@ -10,7 +10,6 @@ namespace GodnessChatBot.App.Commands
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
-            TelegramBot.DialogBranches[chatId.ToString()] = null;
             await client.SendTextMessageAsync(chatId, repository.GetSpreadsheetUrl(chatId.ToString()));
         }
 

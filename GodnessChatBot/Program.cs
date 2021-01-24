@@ -6,10 +6,11 @@ namespace GodnessChatBot
     internal static class Program
     {
         public static void Main()
-        { 
-            TelegramBot.Start();
+        {
+            var bot = new TelegramBot();
+            bot.Start();
             Console.ReadKey();
-            TelegramBot.Stop();
+            bot.Stop();
         }
     }
 }

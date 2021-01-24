@@ -8,10 +8,10 @@ namespace GodnessChatBot.Domain.Processes
     public class LearningDialogBranch : IDialogBranch
     {
         private LearningDialogBranchState status = LearningDialogBranchState.SelectingPack;
-        private readonly HashSet<ILearningWay> learningWays;
+        private readonly HashSet<LearningWay> learningWays;
         
         private Pack pack;
-        private ILearningWay learningWay;
+        private LearningWay learningWay;
         private int currentIndex;
         
         private Repository repository;
@@ -19,7 +19,7 @@ namespace GodnessChatBot.Domain.Processes
         public LearningDialogBranch(Repository repository)
         {
             this.repository = repository;
-            learningWays = new HashSet<ILearningWay>
+            learningWays = new HashSet<LearningWay>
             {
                 new LearningWayByTest(),
                 new LearningWayByTyping(),
@@ -38,6 +38,7 @@ namespace GodnessChatBot.Domain.Processes
                 
                 pack.OrderCards();
                 status = LearningDialogBranchState.WaitingLearningWay;
+                var a = learningWays.Select(x => x.Name).ToList();
                 return new ReplyMessage(new List<string> {"Выбери способ обучения"},
                     learningWays.Select(x => x.Name).ToList());
             }
@@ -55,35 +56,18 @@ namespace GodnessChatBot.Domain.Processes
                 if (learningWay == null)
                     throw new ArgumentException();
                 
-                learningWay.Pack = pack;
                 currentIndex = 0;
-                var question = learningWay.SendQuestion(currentIndex);
-                var answers = learningWay.SendPossibleAnswers();
                 status = LearningDialogBranchState.Learning;
             
-                return new ReplyMessage(new List<string> {question},answers);
+                return learningWay.Learn(pack[currentIndex], pack, null);
             }
-            else
-            {
-                var result = learningWay.GetAnswer(out var answer, message);
-                if (result == null)
-                {
-                    var quest = learningWay.SendQuestion(currentIndex);
-                    var ans = learningWay.SendPossibleAnswers();
-                    return new ReplyMessage(new List<string>{quest}, ans);
-                }
-                if (result == true)
-                    learningWay.Pack[currentIndex].Statistic++;
-                else
-                    learningWay.Pack[currentIndex].Statistic--;
-                
-                currentIndex = (currentIndex + 1) % learningWay.Pack.Cards.Count;
-                
-                var question = learningWay.SendQuestion(currentIndex);
-                var answers = learningWay.SendPossibleAnswers();
-                
-                return new ReplyMessage(new List<string> {answer, question},answers);
-            }
+
+            var replyMessage = learningWay.Learn(pack[currentIndex], pack, message);
+            
+            if (learningWay.NeedNextCard)
+                currentIndex = (currentIndex + 1) % pack.Cards.Count;
+
+            return replyMessage.JoinReplyMessages(learningWay.Learn(pack[currentIndex], pack, null));
         }
 
         public ReplyMessage Finish(string id)
@@ -91,7 +75,7 @@ namespace GodnessChatBot.Domain.Processes
             if (pack == null)
                 return new ReplyMessage(new List<string> {"Вызови команду /создать"});
             
-            repository.UpdateStatisticsPack(id, learningWay.Pack);
+            repository.UpdateStatisticsPack(id, pack);
             return new ReplyMessage(new List<string> {"Отличная тренировка!"});
         }
     }

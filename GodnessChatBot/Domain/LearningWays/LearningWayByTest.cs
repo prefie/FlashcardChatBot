@@ -4,44 +4,47 @@ using System.Linq;
 
 namespace GodnessChatBot.Domain.LearningWays
 {
-    public class LearningWayByTest : ILearningWay
+    public class LearningWayByTest : LearningWay
     {
-        public string Name => "Тест";
-        public Pack Pack { get; set; }
-        private int CardIndex { get; set; }
-        
-        public LearningWayByTest() {}
+        public override string Name => "Тест";
+        private LearningByTestState state = LearningByTestState.WaitingQuestion;
+        public LearningWayByTest() => NeedNextCard = true;
 
-        public LearningWayByTest(Pack pack)
+        public override ReplyMessage Learn(Card card, Pack pack, string message)
         {
-            Pack = pack;
-        }
+            if (state == LearningByTestState.WaitingQuestion)
+            {
+                var question = card.Face;
+            
+                var random = new Random();
+                var possibleAnswers = pack.Cards
+                    .Where(c => !Equals(c, card))
+                    .OrderBy(x => random.Next())
+                    .Select(c => c.Back)
+                    .Take(3)
+                    .Append(card.Back)
+                    .OrderBy(x => random.Next())
+                    .ToList();
 
-        public string SendQuestion(int cardIndex)
-        {
-            CardIndex = cardIndex;
-            return Pack[CardIndex].Face;
-        }
+                state = LearningByTestState.WaitingResult;
 
-        public List<string> SendPossibleAnswers()
-        {
-            var random = new Random();
-            return Pack.Cards
-                .Where(card => !Equals(card, Pack[CardIndex]))
-                .OrderBy(x => random.Next())
-                .Select(card => card.Back)
-                .Take(3)
-                .Append(Pack[CardIndex].Back)
-                .OrderBy(x => random.Next())
-                .ToList();
-        }
+                return new ReplyMessage(new List<string>{question}, possibleAnswers);
+            }
 
-        public bool? GetAnswer(out string answer, string message)
-        {
-             answer = String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase)
+            var result = string.Equals(card.Back, message, StringComparison.CurrentCultureIgnoreCase);
+            var answer = result
                 ? "Верно!"
-                : $"Неверно :(\nПравильный ответ: {Pack[CardIndex].Back}";
-             return String.Equals(Pack[CardIndex].Back, message, StringComparison.CurrentCultureIgnoreCase);
+                : $"Неверно :(\nПравильный ответ: {card.Back}";
+            
+            CalculateStatistic(card, result);
+            state = LearningByTestState.WaitingQuestion;
+            return new ReplyMessage(new List<string>{answer});
         }
+    }
+    
+    public enum LearningByTestState
+    {
+        WaitingQuestion,
+        WaitingResult
     }
 }

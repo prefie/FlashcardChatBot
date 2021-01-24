@@ -33,7 +33,6 @@ namespace GodnessChatBot.App.Commands
                 }, true,
                 true);
             
-            TelegramBot.DialogBranches[chatId.ToString()] = null;
             await client.SendTextMessageAsync(chatId, "Давай начнем :)", replyMarkup: replyKeyboard);
         }
 
