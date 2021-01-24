@@ -12,9 +12,6 @@ namespace GodnessChatBot.Domain.Processes
         {
             if (status == AdditionEnum.Start)
             {
-                if (status != AdditionEnum.Start)
-                    throw new InvalidOperationException();
-            
                 name = message;
                 status = AdditionEnum.Execute;
                 return new Information(new List<string> 

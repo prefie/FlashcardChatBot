@@ -12,9 +12,6 @@ namespace GodnessChatBot.Domain.Processes
         {
             if (status == CreationEnum.Start)
             {
-                if (status != CreationEnum.Start)
-                    throw new InvalidOperationException();
-            
                 name = message;
                 var pack = new Pack(name, new Card[] { });
                 Repository.AddPack(id, pack);
