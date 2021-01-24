@@ -12,10 +12,12 @@ namespace GodnessChatBot.App.Commands
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
-            var keyboard = TelegramBot.GetButtons(Repository.GetPacksNames(message.From.Id.ToString()).ToList());
+            var keyboard = TelegramBot.GetButtons(repository.GetPacksNames(message.From.Id.ToString()).ToList());
             
-            TelegramBot.Teachers[chatId.ToString()] = new Teacher(chatId.ToString(), new AdditionProcess());
+            TelegramBot.DialogBranches[chatId.ToString()] = new AdditionDialogBranch(repository);
             await client.SendTextMessageAsync(chatId, "Выбери колоду, в которые будешь добавлять карты", replyMarkup:keyboard);
         }
+
+        public AdditionCommand(Repository repository) : base(repository) { }
     }
 }

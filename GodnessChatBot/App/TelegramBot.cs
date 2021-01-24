@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GodnessChatBot.App.Commands;
 using GodnessChatBot.Domain;
+using GodnessChatBot.Domain.Processes;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -12,18 +13,19 @@ namespace GodnessChatBot.App
     {
         private static readonly TelegramBotClient Bot;
         private static readonly List<Command> Commands = new List<Command>();
-        public static readonly Dictionary<string, Teacher> Teachers = new Dictionary<string, Teacher>();
+        public static readonly Dictionary<string, IDialogBranch> DialogBranches = new Dictionary<string, IDialogBranch>();
+        public static readonly Repository Repository = new Repository();
 
         static TelegramBot()
         {
             Bot = new TelegramBotClient(AppSettings.Key);
-            Commands.Add(new HelloCommand());
-            Commands.Add(new HelpCommand());
-            Commands.Add(new CreateCommand());
-            Commands.Add(new LearnCommand());
-            Commands.Add(new SendPackCommand());
-            Commands.Add(new SendTableCommand());
-            Commands.Add(new AdditionCommand());
+            Commands.Add(new HelloCommand(Repository));
+            Commands.Add(new HelpCommand(Repository));
+            Commands.Add(new CreateCommand(Repository));
+            Commands.Add(new LearnCommand(Repository));
+            Commands.Add(new SendPackCommand(Repository));
+            Commands.Add(new SendTableCommand(Repository));
+            Commands.Add(new AdditionCommand(Repository));
         }
 
         public static void Start()
@@ -40,15 +42,15 @@ namespace GodnessChatBot.App
             var message = e.Message;
             var userId = message.From.Id.ToString();
             
-            if (!Teachers.ContainsKey(userId))
-                Teachers.Add(userId, new Teacher(userId));
+            if (!DialogBranches.ContainsKey(userId))
+                DialogBranches.Add(userId, null);
             
             //TODO : delete this
             Console.WriteLine($"{message.From.FirstName} {message.From.LastName} отправил сообщение боту: {message.Text}");
 
             foreach (var command in Commands)
             {
-                if (command.Contains(message.Text))
+                if (command.Equals(message.Text))
                 {
                     command.Execute(message, Bot);
                     return;
@@ -66,17 +68,19 @@ namespace GodnessChatBot.App
             await Bot.EditMessageReplyMarkupAsync(e.CallbackQuery.Message.Chat.Id,
                 e.CallbackQuery.Message.MessageId);
 
-            if (!Teachers.ContainsKey(userId))
+            if (!DialogBranches.ContainsKey(userId))
             {
-                await Bot.SendTextMessageAsync(callbackQuery.From.Id, "Никакой процесс не запущен, начни сначала :(");
+                await Bot.SendTextMessageAsync(callbackQuery.From.Id,
+                    @"Извини, я тебя не понял, давай начнем сначала :( 
+Вызови команду /help и я расскажу тебе, что я умею :)");
                 return;
             }
 
             if (callbackQuery.Data == "Завершить" || callbackQuery.Data == "Закончить обучение")
             {
-                var messages = Teachers[userId].FinishProcess().Messages;
-                foreach (var answerMessage in messages)
-                    await Bot.SendTextMessageAsync(callbackQuery.From.Id, answerMessage);
+                var messages = DialogBranches[userId].Finish(userId).Messages;
+                
+                await Bot.SendTextMessageAsync(callbackQuery.From.Id, messages);
                 return;
             }
             
@@ -85,17 +89,14 @@ namespace GodnessChatBot.App
 
         private static async void SendMessages(string id, string message)
         {
-            var answer = Teachers[id].CheckStatusAndReturnAnswer(message);
-
-            for (var i = 0; i < answer.Messages.Count - 1; i++)
-                await Bot.SendTextMessageAsync(id, answer.Messages[i]);
-
-            var last = answer.Messages[answer.Messages.Count - 1];
+            var answer = DialogBranches[id] == null
+                ? new ReplyMessage(new List<string> {"Я такого не знаю :("})
+                : DialogBranches[id].Execute(id, message);
             
-            answer.AdditionalInfo.Add("Завершить");
-            var buttons = GetButtons(answer.AdditionalInfo);
+            answer.ReplyOptions.Add("Завершить");
+            var buttons = GetButtons(answer.ReplyOptions);
 
-            await Bot.SendTextMessageAsync(id, last, replyMarkup: buttons);
+            await Bot.SendTextMessageAsync(id, answer.Messages, replyMarkup: buttons);
         }
         
         public static InlineKeyboardMarkup GetButtons(List<string> headers)
