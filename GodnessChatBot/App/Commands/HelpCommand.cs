@@ -10,7 +10,7 @@ namespace GodnessChatBot.App.Commands
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
-            TelegramBot.Teachers[chatId.ToString()] = new Teacher(chatId.ToString());
+            TelegramBot.DialogBranches[chatId.ToString()] = null;
             await client.SendTextMessageAsync(chatId, helpMessage);
         }
         
@@ -23,6 +23,8 @@ namespace GodnessChatBot.App.Commands
             "“Создать колоду”, выбери для неё название, и мы приступим к её заполнению." +
             " Во время этого процесса я подскажу тебе, что делать. " +
             "Существующие колоды можно учить (команда “Учить колоду”), " +
-            "изменять (команда “Изменить колоду”), делиться ими с друзьями (команда “Поделиться колодой”). "; 
+            "изменять (команда “Изменить колоду”), делиться ими с друзьями (команда “Поделиться колодой”). ";
+
+        public HelpCommand(Repository repository) : base(repository) { }
     }
 }

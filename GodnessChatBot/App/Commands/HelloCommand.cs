@@ -13,7 +13,7 @@ namespace GodnessChatBot.App.Commands
         {
             var chatId = message.Chat.Id;
             
-            Repository.CreateSpreadsheet(message.From.Id.ToString());
+            repository.CreateSpreadsheet(message.From.Id.ToString());
             var replyKeyboard = new ReplyKeyboardMarkup(new []
                 {
                     new[]
@@ -33,8 +33,10 @@ namespace GodnessChatBot.App.Commands
                 }, true,
                 true);
             
-            TelegramBot.Teachers[chatId.ToString()] = new Teacher(chatId.ToString());
+            TelegramBot.DialogBranches[chatId.ToString()] = null;
             await client.SendTextMessageAsync(chatId, "Давай начнем :)", replyMarkup: replyKeyboard);
         }
+
+        public HelloCommand(Repository repository) : base(repository) { }
     }
 }
