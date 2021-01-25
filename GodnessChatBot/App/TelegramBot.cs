@@ -45,7 +45,6 @@ namespace GodnessChatBot.App
             if (!dialogBranches.ContainsKey(userId))
                 dialogBranches.Add(userId, null);
             
-            //TODO : delete this
             Console.WriteLine($"{message.From.FirstName} {message.From.LastName} отправил сообщение боту: {message.Text}");
 
             if (dialogBranches[userId] == null)
@@ -79,6 +78,7 @@ namespace GodnessChatBot.App
 
             if (callbackQuery.Data == "Завершить" || callbackQuery.Data == "Закончить обучение")
             {
+                if (dialogBranches[userId] == null) return;
                 var messages = dialogBranches[userId].Finish(userId).Messages;
 
                 dialogBranches[userId] = null;
