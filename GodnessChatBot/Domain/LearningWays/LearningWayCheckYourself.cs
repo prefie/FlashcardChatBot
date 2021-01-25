@@ -10,10 +10,17 @@ namespace GodnessChatBot.Domain.LearningWays
         public LearningWayCheckYourself() => NeedNextCard = true;
         
         
-        public override ReplyMessage Learn(Card card, Pack pack, string message)
+        public override ReplyMessage Learn(Card previousCard, Card card, Pack pack, string message)
         {
+            if (state == LearningCheckYourselfState.WaitingFirstCard)
+            {
+                state = LearningCheckYourselfState.WaitingAnotherCard;
+                return new ReplyMessage(new List<string>{card.Face}, 
+                    new List<string>{"Показать ответ"});
+            }
+            
             NeedNextCard = !string.Equals(message, "Показать ответ", StringComparison.InvariantCultureIgnoreCase);
-            var question = NeedNextCard ? card.Face : card.Back;
+            var question = NeedNextCard ? card.Face : previousCard.Back;
 
             if (!NeedNextCard)
             {
@@ -21,15 +28,14 @@ namespace GodnessChatBot.Domain.LearningWays
                     new List<string> {"Помню", "Не помню"});
             }
 
-            if (state == LearningCheckYourselfState.WaitingFirstCard)
+            if (!string.Equals(message, "Помню", StringComparison.CurrentCultureIgnoreCase)
+                && !string.Equals(message, "Не помню", StringComparison.CurrentCultureIgnoreCase))
             {
-                state = LearningCheckYourselfState.WaitingAnotherCard;
-                return new ReplyMessage(new List<string>{question}, 
-                    new List<string>{"Показать ответ", "Помню", "Не помню"});
+                return new ReplyMessage(new List<string> 
+                    { "Недопустимый вариант ответа, нажми на одну из кнопок сообщения выше :)" });
             }
-            
             return new ReplyMessage(new List<string>{"Хорошо, идём дальше", question}, 
-                    new List<string>{"Показать ответ", "Помню", "Не помню"});
+                    new List<string>{"Показать ответ"});
         }
     }
 

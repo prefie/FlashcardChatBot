@@ -6,33 +6,32 @@ namespace GodnessChatBot.Domain.LearningWays
     public class LearningWayByTyping : LearningWay
     {
         public override string Name => "Ввод ответа";
-        private LearningByTypingState state = LearningByTypingState.WaitingQuestion;
+        private LearningByTypingState state = LearningByTypingState.WaitingFirstCard;
 
         public LearningWayByTyping() => NeedNextCard = true;
         
-        public override ReplyMessage Learn(Card card, Pack pack, string message)
+        public override ReplyMessage Learn(Card previousCard, Card card, Pack pack, string message)
         {
-            if (state == LearningByTypingState.WaitingQuestion)
+            if (state == LearningByTypingState.WaitingFirstCard)
             {
                 var question = card.Face;
-                state = LearningByTypingState.WaitingResult;
+                state = LearningByTypingState.WaitingAnotherCard;
                 return new ReplyMessage(new List<string> {question});
             }
 
-            var result = string.Equals(card.Back, message, StringComparison.CurrentCultureIgnoreCase);
+            var result = string.Equals(previousCard.Back, message, StringComparison.CurrentCultureIgnoreCase);
             var answer = result
                 ? "Верно!"
-                : $"Неверно :(\nПравильный ответ: {card.Back}";
+                : $"Неверно :(\nПравильный ответ: {previousCard.Back}";
             
-            CalculateStatistic(card, result);
-            state = LearningByTypingState.WaitingQuestion;
-            return new ReplyMessage(new List<string> {answer});
+            CalculateStatistic(previousCard, result);
+            return new ReplyMessage(new List<string> {answer, card.Face});
         }
     }
 
     public enum LearningByTypingState
     {
-        WaitingQuestion,
-        WaitingResult
+        WaitingFirstCard,
+        WaitingAnotherCard
     }
 }

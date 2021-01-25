@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GodnessChatBot.App.Commands;
 using GodnessChatBot.Domain;
-using GodnessChatBot.Domain.Processes;
+using GodnessChatBot.Domain.DialogBranches;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -12,20 +12,15 @@ namespace GodnessChatBot.App
     public class TelegramBot
     {
         private readonly TelegramBotClient bot;
-        private readonly List<Command> commands = new List<Command>();
-        private readonly Dictionary<string, IDialogBranch> dialogBranches = new Dictionary<string, IDialogBranch>();
-        private readonly Repository repository = new Repository();
+        private readonly Command[] commands;
+        private readonly Dictionary<string, IDialogBranch> dialogBranches;
 
-        public TelegramBot()
+        public TelegramBot(Command[] commands,
+            TelegramBotClient bot, Dictionary<string, IDialogBranch> dialogBranches)
         {
-            bot = new TelegramBotClient(AppSettings.Key);
-            commands.Add(new HelloCommand(repository));
-            commands.Add(new HelpCommand(repository));
-            commands.Add(new SendPackCommand(repository));
-            commands.Add(new SendTableCommand(repository));
-            commands.Add(new CreateCommand(repository, dialogBranches));
-            commands.Add(new LearnCommand(repository, dialogBranches));
-            commands.Add(new AdditionCommand(repository, dialogBranches));
+            this.commands = commands;
+            this.bot = bot;
+            this.dialogBranches = dialogBranches;
         }
 
         public void Start()
@@ -45,7 +40,6 @@ namespace GodnessChatBot.App
             if (!dialogBranches.ContainsKey(userId))
                 dialogBranches.Add(userId, null);
             
-            //TODO : delete this
             Console.WriteLine($"{message.From.FirstName} {message.From.LastName} отправил сообщение боту: {message.Text}");
 
             if (dialogBranches[userId] == null)
@@ -79,6 +73,7 @@ namespace GodnessChatBot.App
 
             if (callbackQuery.Data == "Завершить" || callbackQuery.Data == "Закончить обучение")
             {
+                if (dialogBranches[userId] == null) return;
                 var messages = dialogBranches[userId].Finish(userId).Messages;
 
                 dialogBranches[userId] = null;

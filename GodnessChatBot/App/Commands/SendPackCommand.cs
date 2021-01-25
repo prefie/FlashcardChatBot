@@ -13,6 +13,6 @@ namespace GodnessChatBot.App.Commands
             await client.SendTextMessageAsync(chatId, "Прости, я пока что это не умею( ");
         }
 
-        public SendPackCommand(Repository repository) : base(repository) { }
+        public SendPackCommand(IRepository repository) : base(repository) { }
     }
 }

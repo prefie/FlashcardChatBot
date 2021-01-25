@@ -1,4 +1,4 @@
-﻿namespace GodnessChatBot.Domain.Processes
+﻿namespace GodnessChatBot.Domain.DialogBranches
 {
     public interface IDialogBranch
     {

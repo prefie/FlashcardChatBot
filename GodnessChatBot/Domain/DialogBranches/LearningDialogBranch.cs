@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GodnessChatBot.Domain.LearningWays;
 
-namespace GodnessChatBot.Domain.Processes
+namespace GodnessChatBot.Domain.DialogBranches
 {
     public class LearningDialogBranch : IDialogBranch
     {
@@ -13,18 +13,12 @@ namespace GodnessChatBot.Domain.Processes
         private Pack pack;
         private LearningWay learningWay;
         private int currentIndex;
-        
-        private Repository repository;
+        private readonly IRepository repository;
 
-        public LearningDialogBranch(Repository repository)
+        public LearningDialogBranch(IRepository repository, HashSet<LearningWay> learningWays)
         {
             this.repository = repository;
-            learningWays = new HashSet<LearningWay>
-            {
-                new LearningWayByTest(),
-                new LearningWayByTyping(),
-                new LearningWayCheckYourself()
-            };
+            this.learningWays = learningWays;
         }
 
         public ReplyMessage Execute(string id, string message)
@@ -34,11 +28,11 @@ namespace GodnessChatBot.Domain.Processes
                 pack = repository.GetPack(id, message);
 
                 if (pack == null)
-                    return new ReplyMessage(new List<string> {"Этой колоды нет, она пустая или там ошибка, проверь таблицу:("});
+                    return new ReplyMessage(new List<string>
+                        {"Этой колоды нет, она пустая или в ней ошибка"});
                 
                 pack.OrderCards();
                 status = LearningDialogBranchState.WaitingLearningWay;
-                var a = learningWays.Select(x => x.Name).ToList();
                 return new ReplyMessage(new List<string> {"Выбери способ обучения"},
                     learningWays.Select(x => x.Name).ToList());
             }
@@ -56,30 +50,31 @@ namespace GodnessChatBot.Domain.Processes
                 if (learningWay == null)
                     throw new ArgumentException();
                 
-                currentIndex = 0;
+                currentIndex = 0; 
                 status = LearningDialogBranchState.Learning;
             
-                return learningWay.Learn(pack[currentIndex], pack, null);
+                return learningWay.Learn(null, pack[currentIndex], pack, null);
             }
 
-            var replyMessage = learningWay.Learn(pack[currentIndex], pack, message);
-            
+            var previousCard = pack[currentIndex];
             if (learningWay.NeedNextCard)
                 currentIndex = (currentIndex + 1) % pack.Cards.Count;
+            var nextCard = pack[currentIndex];
 
-            return replyMessage.JoinReplyMessages(learningWay.Learn(pack[currentIndex], pack, null));
+            return learningWay.Learn(previousCard, nextCard, pack, message);
         }
 
         public ReplyMessage Finish(string id)
         {
             if (pack == null)
-                return new ReplyMessage(new List<string> {"Вызови команду /создать"});
+                return new ReplyMessage(new List<string>
+                    {"Вызови команду «Получить ссылку на таблицу» и проверь колоду :)"});
             
             repository.UpdateStatisticsPack(id, pack);
             return new ReplyMessage(new List<string> {"Отличная тренировка!"});
         }
     }
-    
+
     public enum LearningDialogBranchState
     {
         SelectingPack,

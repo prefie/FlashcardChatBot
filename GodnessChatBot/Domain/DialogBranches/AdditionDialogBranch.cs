@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace GodnessChatBot.Domain.Processes
+namespace GodnessChatBot.Domain.DialogBranches
 {
     public class AdditionDialogBranch : IDialogBranch
     {
         private AdditionDialogBranchState status = AdditionDialogBranchState.SelectingPack;
         private string name;
-        private Repository repository;
+        private readonly IRepository repository;
 
-        public AdditionDialogBranch(Repository repository)
+        public AdditionDialogBranch(IRepository repository)
         {
             this.repository = repository;
         }

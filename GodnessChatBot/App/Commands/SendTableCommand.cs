@@ -13,6 +13,6 @@ namespace GodnessChatBot.App.Commands
             await client.SendTextMessageAsync(chatId, repository.GetSpreadsheetUrl(chatId.ToString()));
         }
 
-        public SendTableCommand(Repository repository) : base(repository) { }
+        public SendTableCommand(IRepository repository) : base(repository) { }
     }
 }

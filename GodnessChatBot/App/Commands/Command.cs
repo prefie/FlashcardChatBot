@@ -7,8 +7,8 @@ namespace GodnessChatBot.App.Commands
 {
     public abstract class Command
     {
-        public Repository repository;
-        public Command(Repository repository)
+        public IRepository repository;
+        public Command(IRepository repository)
         {
             this.repository = repository;
         }
