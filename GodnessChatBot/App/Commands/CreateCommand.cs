@@ -12,6 +12,7 @@ namespace GodnessChatBot.App.Commands
         protected override string Name => "Создать";
         private readonly Dictionary<string, IDialogBranch> dialogs;
         private readonly Func<CreationDialogBranch> createCreationDialogBranch;
+        
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;

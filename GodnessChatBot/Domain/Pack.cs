@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GodnessChatBot.Domain
 {
-    public class Pack
+    public class Pack : IEnumerable<Card>
     {
-        public string Name { get; private set; }
+        public string Name { get; }
         private List<Card> cards;
-        public IReadOnlyList<Card> Cards => cards.AsReadOnly();
+        public int Count => cards.Count;
 
         public Pack(
             string name,
@@ -26,13 +27,16 @@ namespace GodnessChatBot.Domain
         public void OrderCards() => cards = cards.OrderBy(x => x.Statistic).ToList();
         
         public void AddCard(Card card) => cards.Add(card);
-
-        public bool RemoveCard(Card card) => cards.Remove(card);
-        public void Rename(string name) => Name = name;
-
-        public Pack Share() => new Pack(Name, Cards);
         
         public override int GetHashCode() => Name.GetHashCode();
+        
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IEnumerator<Card> GetEnumerator()
+        {
+            foreach (var card in cards)
+                yield return card;
+        }
 
         public override bool Equals(object obj)
         {
@@ -40,8 +44,8 @@ namespace GodnessChatBot.Domain
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
 
-            var category = (Pack) obj;
-            return string.Equals(Name, category.Name);
+            var pack = (Pack) obj;
+            return string.Equals(Name, pack.Name);
         }
 
         public Card this[int index] => cards[index];

@@ -58,7 +58,7 @@ namespace GodnessChatBot.Domain.DialogBranches
 
             var previousCard = pack[currentIndex];
             if (learningWay.NeedNextCard)
-                currentIndex = (currentIndex + 1) % pack.Cards.Count;
+                currentIndex = (currentIndex + 1) % pack.Count;
             var nextCard = pack[currentIndex];
 
             return learningWay.Learn(previousCard, nextCard, pack, message);

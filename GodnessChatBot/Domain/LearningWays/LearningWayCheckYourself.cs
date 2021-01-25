@@ -9,7 +9,6 @@ namespace GodnessChatBot.Domain.LearningWays
         private LearningCheckYourselfState state = LearningCheckYourselfState.WaitingFirstCard;
         public LearningWayCheckYourself() => NeedNextCard = false;
         
-        
         public override ReplyMessage Learn(Card previousCard, Card card, Pack pack, string message)
         {
             if (state == LearningCheckYourselfState.WaitingFirstCard)

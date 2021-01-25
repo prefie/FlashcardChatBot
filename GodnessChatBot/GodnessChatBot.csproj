@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="..\packages\NUnit.3.13.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.13.0\build\NUnit.props')" />
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -33,7 +34,11 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
-          <HintPath>..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
+          <HintPath>packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="FluentAssertions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a">
+          <HintPath>..\packages\FluentAssertions.6.0.0-alpha0002\lib\net47\FluentAssertions.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Google.Apis, Version=1.49.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
@@ -53,7 +58,7 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="Google.Apis.Drive.v3, Version=1.49.0.2201, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
-          <HintPath>..\packages\Google.Apis.Drive.v3.1.49.0.2201\lib\net45\Google.Apis.Drive.v3.dll</HintPath>
+          <HintPath>packages\Google.Apis.Drive.v3.1.49.0.2201\lib\net45\Google.Apis.Drive.v3.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Google.Apis.PlatformServices, Version=1.49.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
@@ -61,7 +66,7 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="Google.Apis.Sheets.v4, Version=1.49.0.2175, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
-          <HintPath>..\packages\Google.Apis.Sheets.v4.1.49.0.2175\lib\net45\Google.Apis.Sheets.v4.dll</HintPath>
+          <HintPath>packages\Google.Apis.Sheets.v4.1.49.0.2175\lib\net45\Google.Apis.Sheets.v4.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="mscorlib" />
@@ -69,16 +74,20 @@
           <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Ninject, Version=3.3.3.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
-          <HintPath>..\packages\Ninject.3.3.3\lib\net45\Ninject.dll</HintPath>
+        <Reference Include="Ninject, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+          <HintPath>packages\Ninject.4.0.0-beta-0134\lib\net45\Ninject.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Ninject.Extensions.Conventions, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
-          <HintPath>..\packages\Ninject.Extensions.Conventions.3.3.0\lib\net45\Ninject.Extensions.Conventions.dll</HintPath>
+          <HintPath>packages\Ninject.Extensions.Conventions.3.3.0\lib\net45\Ninject.Extensions.Conventions.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Ninject.Extensions.Factory, Version=3.3.2.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
-          <HintPath>..\packages\Ninject.Extensions.Factory.3.3.2\lib\net45\Ninject.Extensions.Factory.dll</HintPath>
+          <HintPath>packages\Ninject.Extensions.Factory.3.3.2\lib\net45\Ninject.Extensions.Factory.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="nunit.framework, Version=3.13.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+          <HintPath>..\packages\NUnit.3.13.0\lib\net45\nunit.framework.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System" />
@@ -116,13 +125,13 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
         <Reference Include="Telegram.Bot, Version=15.7.1.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\packages\Telegram.Bot.15.7.1\lib\net45\Telegram.Bot.dll</HintPath>
           <Private>True</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="App\AppSettings.cs" />
         <Compile Include="App\TelegramBot.cs" />
         <Compile Include="App\Commands\AdditionCommand.cs" />
         <Compile Include="App\Commands\Command.cs" />
@@ -147,6 +156,7 @@
         <Compile Include="Domain\Repository.cs" />
         <Compile Include="Infrastructure\GoogleSpreadsheetsHandler.cs" />
         <Compile Include="Program.cs" />
+        <Compile Include="ProjectTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -158,6 +168,12 @@
       </Content>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+      <PropertyGroup>
+        <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+      </PropertyGroup>
+      <Error Condition="!Exists('..\packages\NUnit.3.13.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.13.0\build\NUnit.props'))" />
+    </Target>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

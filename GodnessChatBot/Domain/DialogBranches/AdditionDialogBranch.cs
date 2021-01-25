@@ -8,10 +8,7 @@ namespace GodnessChatBot.Domain.DialogBranches
         private string name;
         private readonly IRepository repository;
 
-        public AdditionDialogBranch(IRepository repository)
-        {
-            this.repository = repository;
-        }
+        public AdditionDialogBranch(IRepository repository) => this.repository = repository;
 
         public ReplyMessage Execute(string id, string message)
         {
@@ -38,10 +35,7 @@ namespace GodnessChatBot.Domain.DialogBranches
             return new ReplyMessage(new List<string> { "Запомнил" });
         }
 
-        public ReplyMessage Finish(string id)
-        {
-            return new ReplyMessage(new List<string> {"Готово!"});
-        }
+        public ReplyMessage Finish(string id) => new ReplyMessage(new List<string> {"Готово!"});
     }
 
     public enum AdditionDialogBranchState

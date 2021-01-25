@@ -7,6 +7,7 @@ namespace GodnessChatBot.App.Commands
     public class HelpCommand : Command
     {
         protected override string Name => "/help";
+        
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
