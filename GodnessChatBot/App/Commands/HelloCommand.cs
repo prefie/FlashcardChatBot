@@ -7,13 +7,13 @@ namespace GodnessChatBot.App.Commands
 {
     public class HelloCommand : Command
     {
-        public override string Name => "/start";
+        protected override string Name => "/start";
         
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
             
-            repository.CreateSpreadsheetForUser(message.From.Id.ToString());
+            Repository.CreateSpreadsheetForUser(message.From.Id.ToString());
             var replyKeyboard = new ReplyKeyboardMarkup(new []
                 {
                     new[]

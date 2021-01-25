@@ -6,7 +6,7 @@ namespace GodnessChatBot.App.Commands
 {
     public class HelpCommand : Command
     {
-        public override string Name => "/help";
+        protected override string Name => "/help";
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
@@ -14,7 +14,7 @@ namespace GodnessChatBot.App.Commands
         }
         
         private static readonly string helpMessage =
-            "Привет! Я – чат-бот Богиня, твой главный помощник в быстром," +
+            "Привет! Я – Flashcard чат-бот, твой главный помощник в быстром," +
             " простом и эффективном обучении. Давай расскажу, что я умею. " +
             "Моя главная миссия - помогать людям учить нужную им информацию," +
             " и я придумал для этого отличный способ - флэш карточки. " +

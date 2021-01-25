@@ -6,11 +6,11 @@ namespace GodnessChatBot.App.Commands
 {
     public class SendTableCommand : Command
     {
-        public override string Name => "Получить ссылку на таблицу";
+        protected override string Name => "Получить ссылку на таблицу";
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
-            await client.SendTextMessageAsync(chatId, repository.GetSpreadsheetUrl(chatId.ToString()));
+            await client.SendTextMessageAsync(chatId, Repository.GetSpreadsheetUrl(chatId.ToString()));
         }
 
         public SendTableCommand(IRepository repository) : base(repository) { }

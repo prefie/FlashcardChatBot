@@ -7,12 +7,14 @@ namespace GodnessChatBot.App.Commands
 {
     public abstract class Command
     {
-        public IRepository repository;
-        public Command(IRepository repository)
+        protected readonly IRepository Repository;
+
+        protected Command(IRepository repository)
         {
-            this.repository = repository;
+            Repository = repository;
         }
-        public abstract string Name { get; }
+
+        protected abstract string Name { get; }
 
         public abstract void Execute(Message message, TelegramBotClient client);
 
