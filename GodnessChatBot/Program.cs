@@ -28,7 +28,8 @@ namespace GodnessChatBot
                 .SelectAllClasses().InheritedFrom<Command>().BindAllBaseClasses());
             container.Bind(x => x.FromThisAssembly()
                 .SelectAllClasses().InheritedFrom<LearningWay>().BindAllBaseClasses());
-            container.Bind<TelegramBotClient>().ToConstant(new TelegramBotClient(AppSettings.Key));
+            container.Bind<TelegramBotClient>()
+                .ToConstant(new TelegramBotClient(Environment.GetEnvironmentVariable("BotKey")));
             container.Bind<IRepository>().To<Repository>().InSingletonScope();
             container.Bind<Dictionary<string, IDialogBranch>>().ToSelf().InSingletonScope();
             container.Bind<TelegramBot>().ToSelf()

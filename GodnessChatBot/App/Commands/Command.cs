@@ -9,10 +9,7 @@ namespace GodnessChatBot.App.Commands
     {
         protected readonly IRepository Repository;
 
-        protected Command(IRepository repository)
-        {
-            Repository = repository;
-        }
+        protected Command(IRepository repository) => Repository = repository;
 
         protected abstract string Name { get; }
 

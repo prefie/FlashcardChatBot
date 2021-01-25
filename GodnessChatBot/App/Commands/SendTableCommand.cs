@@ -7,6 +7,7 @@ namespace GodnessChatBot.App.Commands
     public class SendTableCommand : Command
     {
         protected override string Name => "Получить ссылку на таблицу";
+        
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;

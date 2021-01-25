@@ -5,7 +5,6 @@ using GodnessChatBot.Domain;
 using GodnessChatBot.Domain.DialogBranches;
 using Telegram.Bot;
 using Telegram.Bot.Args;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace GodnessChatBot.App
@@ -74,7 +73,7 @@ namespace GodnessChatBot.App
                 {
                     await bot.SendTextMessageAsync(callbackQuery.From.Id,
                         @"Извини, я тебя не понял, давай начнем сначала :( 
-Вызови команду /help и я расскажу тебе, что я умею :)");
+Вызови команду /help, и я расскажу тебе, что я умею :)");
                     return;
                 }
 

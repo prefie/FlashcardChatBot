@@ -36,10 +36,8 @@ namespace GodnessChatBot.Infrastructure
             }).Execute();
 
         protected void SetPermissions(string spreadsheetId, string type, string role)
-        {
-            driveService.Permissions
+            => driveService.Permissions
                 .Create(new Permission {Type = type, Role = role}, spreadsheetId).Execute();
-        }
         
         protected void CreateNewSheet(string spreadsheetId, string sheetName)
         {
@@ -67,22 +65,18 @@ namespace GodnessChatBot.Infrastructure
         }
 
         private SheetsService GetSheetsService(UserCredential credential, string appName)
-        {
-            return new SheetsService(new BaseClientService.Initializer
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = appName
-            });
-        }
+            => new SheetsService(new BaseClientService.Initializer
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = appName
+                });
 
         private DriveService GetDriveService(UserCredential credential, string appName)
-        {
-            return new DriveService(new BaseClientService.Initializer
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = appName
-            });
-        }
+            => new DriveService(new BaseClientService.Initializer
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = appName
+                });
 
         private UserCredential GetSheetCredentials(string client, string[] scopes)
         {

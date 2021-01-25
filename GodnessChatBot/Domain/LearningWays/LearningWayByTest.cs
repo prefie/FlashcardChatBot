@@ -34,7 +34,7 @@ namespace GodnessChatBot.Domain.LearningWays
         private List<string> GetPossibleAnswers(Card card, Pack pack)
         {
             var random = new Random();
-            var possibleAnswers = pack.Cards
+            var possibleAnswers = pack
                 .Where(c => !string.Equals(c.Back, card.Back, StringComparison.CurrentCultureIgnoreCase))
                 .OrderBy(x => random.Next())
                 .Select(c => c.Back)

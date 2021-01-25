@@ -8,10 +8,7 @@ namespace GodnessChatBot.Domain.DialogBranches
         private string name;
         private readonly IRepository repository;
 
-        public AdditionDialogBranch(IRepository repository)
-        {
-            this.repository = repository;
-        }
+        public AdditionDialogBranch(IRepository repository) => this.repository = repository;
 
         public ReplyMessage Execute(string id, string message)
         {
@@ -31,17 +28,14 @@ namespace GodnessChatBot.Domain.DialogBranches
             {
                 return new ReplyMessage(new List<string> 
                 { "Некорректная карточка, пожалуйста, введи так," +
-                  " чтобы лицевая сторона карточи была в первой строке, а во второй строке задняя" });
+                  " чтобы лицевая сторона карточки была в первой строке, а во второй строке задняя" });
             }
 
             repository.AddCardInPack(id, name, new Card(data[0], data[1]));
             return new ReplyMessage(new List<string> { "Запомнил" });
         }
 
-        public ReplyMessage Finish(string id)
-        {
-            return new ReplyMessage(new List<string> {"Готово!"});
-        }
+        public ReplyMessage Finish(string id) => new ReplyMessage(new List<string> {"Готово!"});
     }
 
     public enum AdditionDialogBranchState

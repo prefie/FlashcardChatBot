@@ -19,8 +19,6 @@
             Statistic = statistic;
         }
 
-        public Card Reverse() => new Card(Back, Face);
-
         public override int GetHashCode() => (Face, Back).GetHashCode();
 
         public override bool Equals(object obj)
