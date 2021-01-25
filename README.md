@@ -1,4 +1,4 @@
-# GodnessChatBot
+# FlashcardChatBot
 
 #### Шушарин Николай ФТ-202 prefie44@gmail.com 
 #### Тарасова Виктория ФТ-202 vtarasova394@gmail.com
