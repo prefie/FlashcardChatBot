@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace GodnessChatBot.Domain.Processes
+namespace GodnessChatBot.Domain.DialogBranches
 {
     public class CreationDialogBranch : IDialogBranch
     {
         private CreationDialogBranchState status = CreationDialogBranchState.SelectingPackName;
         private string name;
-        private Repository repository;
+        private readonly IRepository repository;
 
-        public CreationDialogBranch(Repository repository)
+        public CreationDialogBranch(IRepository repository)
         {
             this.repository = repository;
         }

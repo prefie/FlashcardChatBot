@@ -23,8 +23,7 @@ namespace GodnessChatBot.App.Commands
                     },
                     new []
                     {
-                        new KeyboardButton("Добавить карту в колоду"),
-                        new KeyboardButton("Отправить")
+                        new KeyboardButton("Добавить карту в колоду")
                     },
                     new []
                     {
@@ -36,6 +35,6 @@ namespace GodnessChatBot.App.Commands
             await client.SendTextMessageAsync(chatId, "Давай начнем :)", replyMarkup: replyKeyboard);
         }
 
-        public HelloCommand(Repository repository) : base(repository) { }
+        public HelloCommand(IRepository repository) : base(repository) { }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GodnessChatBot.Domain.LearningWays;
 
-namespace GodnessChatBot.Domain.Processes
+namespace GodnessChatBot.Domain.DialogBranches
 {
     public class LearningDialogBranch : IDialogBranch
     {
@@ -13,9 +13,9 @@ namespace GodnessChatBot.Domain.Processes
         private Pack pack;
         private LearningWay learningWay;
         private int currentIndex;
-        private Repository repository;
+        private readonly IRepository repository;
 
-        public LearningDialogBranch(Repository repository, HashSet<LearningWay> learningWays)
+        public LearningDialogBranch(IRepository repository, HashSet<LearningWay> learningWays)
         {
             this.repository = repository;
             this.learningWays = learningWays;

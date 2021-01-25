@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GodnessChatBot.Domain;
-using GodnessChatBot.Domain.Processes;
+using GodnessChatBot.Domain.DialogBranches;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -20,7 +20,7 @@ namespace GodnessChatBot.App.Commands
             await client.SendTextMessageAsync(chatId, "Выбери название колоды\n\nВАЖНО: для вызова другой команды, заверши эту :)");
         }
 
-        public CreateCommand(Repository repository, Dictionary<string, IDialogBranch> dialogs,
+        public CreateCommand(IRepository repository, Dictionary<string, IDialogBranch> dialogs,
             Func<CreationDialogBranch> createCreationDialogBranch) : base(repository)
         {
             this.dialogs = dialogs;

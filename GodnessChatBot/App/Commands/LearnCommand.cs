@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GodnessChatBot.Domain;
-using GodnessChatBot.Domain.Processes;
+using GodnessChatBot.Domain.DialogBranches;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -24,7 +24,7 @@ namespace GodnessChatBot.App.Commands
                 replyMarkup: keyboard);
         }
 
-        public LearnCommand(Repository repository, Dictionary<string,
+        public LearnCommand(IRepository repository, Dictionary<string,
             IDialogBranch> dialogs, Func<LearningDialogBranch> createLearningDialogBranch) : base(repository)
         {
             this.dialogs = dialogs;

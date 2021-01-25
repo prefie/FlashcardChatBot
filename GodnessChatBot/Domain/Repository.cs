@@ -8,7 +8,7 @@ using Google.Apis.Sheets.v4.Data;
 
 namespace GodnessChatBot.Domain
 {
-    public class Repository : GoogleSpreadsheetsHandler
+    public class Repository : GoogleSpreadsheetsHandler, IRepository
     {
         private readonly string usersSpreadsheetId;
         private readonly string usersSheetTitle;

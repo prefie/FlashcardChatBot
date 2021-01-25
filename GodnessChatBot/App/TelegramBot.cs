@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GodnessChatBot.App.Commands;
 using GodnessChatBot.Domain;
-using GodnessChatBot.Domain.Processes;
+using GodnessChatBot.Domain.DialogBranches;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.ReplyMarkups;
