@@ -13,9 +13,9 @@ https://docs.google.com/document/d/1CNmF_zAiRCHuEA80rqJ5m7kRygu-OuqYHppzk8auTHk/
 
 ## Основные компоненты системы
 3 слоя:
--Infrastructure
--Domain
--App
+- Infrastructure
+- Domain
+- App
 
 В слое инфраструктуры содержится модуль для работы с гугл таблицами
 
