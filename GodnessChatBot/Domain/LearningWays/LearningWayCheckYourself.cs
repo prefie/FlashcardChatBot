@@ -7,7 +7,7 @@ namespace GodnessChatBot.Domain.LearningWays
     {
         public override string Name => "Самопроверка";
         private LearningCheckYourselfState state = LearningCheckYourselfState.WaitingFirstCard;
-        public LearningWayCheckYourself() => NeedNextCard = true;
+        public LearningWayCheckYourself() => NeedNextCard = false;
         
         
         public override ReplyMessage Learn(Card previousCard, Card card, Pack pack, string message)
@@ -19,10 +19,10 @@ namespace GodnessChatBot.Domain.LearningWays
                     new List<string>{"Показать ответ"});
             }
             
-            NeedNextCard = !string.Equals(message, "Показать ответ", StringComparison.InvariantCultureIgnoreCase);
-            var question = NeedNextCard ? card.Face : previousCard.Back;
+            NeedNextCard = string.Equals(message, "Показать ответ", StringComparison.InvariantCultureIgnoreCase);
+            var question = NeedNextCard ? previousCard.Back : card.Face;
 
-            if (!NeedNextCard)
+            if (NeedNextCard)
             {
                 return new ReplyMessage(new List<string>{question}, 
                     new List<string> {"Помню", "Не помню"});
@@ -34,6 +34,9 @@ namespace GodnessChatBot.Domain.LearningWays
                 return new ReplyMessage(new List<string> 
                     { "Недопустимый вариант ответа, нажми на одну из кнопок сообщения выше :)" });
             }
+            
+            CalculateStatistic(previousCard,
+                string.Equals(message, "Помню", StringComparison.CurrentCultureIgnoreCase));
             return new ReplyMessage(new List<string>{"Хорошо, идём дальше", question}, 
                     new List<string>{"Показать ответ"});
         }
