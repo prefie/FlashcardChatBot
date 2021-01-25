@@ -13,27 +13,26 @@ namespace GodnessChatBot.App.Commands
         {
             var chatId = message.Chat.Id;
             
-            repository.CreateSpreadsheet(message.From.Id.ToString());
+            repository.CreateSpreadsheetForUser(message.From.Id.ToString());
             var replyKeyboard = new ReplyKeyboardMarkup(new []
                 {
                     new[]
                     {
-                        new KeyboardButton("/Создать"),
-                        new KeyboardButton("/Учить")
+                        new KeyboardButton("Создать"),
+                        new KeyboardButton("Учить")
                     },
                     new []
                     {
-                        new KeyboardButton("/Добавить карту в колоду"),
-                        new KeyboardButton("/Отправить")
+                        new KeyboardButton("Добавить карту в колоду"),
+                        new KeyboardButton("Отправить")
                     },
                     new []
                     {
-                        new KeyboardButton("/Получить ссылку на таблицу")
+                        new KeyboardButton("Получить ссылку на таблицу")
                     }
                 }, true,
                 true);
             
-            TelegramBot.DialogBranches[chatId.ToString()] = null;
             await client.SendTextMessageAsync(chatId, "Давай начнем :)", replyMarkup: replyKeyboard);
         }
 

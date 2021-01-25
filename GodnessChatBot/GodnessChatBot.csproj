@@ -139,7 +139,7 @@
         <Compile Include="App\Commands\SendPackCommand.cs" />
         <Compile Include="App\Commands\SendTableCommand.cs" />
         <Compile Include="Domain\Card.cs" />
-        <Compile Include="Domain\LearningWays\ILearningWay.cs" />
+        <Compile Include="Domain\LearningWays\LearningWay.cs" />
         <Compile Include="Domain\LearningWays\LearningWayByTest.cs" />
         <Compile Include="Domain\LearningWays\LearningWayByTyping.cs" />
         <Compile Include="Domain\LearningWays\LearningWayCheckYourself.cs" />
@@ -150,6 +150,7 @@
         <Compile Include="Domain\DialogBranches\LearningDialogBranch.cs" />
         <Compile Include="Domain\DialogBranches\IDialogBranch.cs" />
         <Compile Include="Domain\Repository.cs" />
+        <Compile Include="Infrastructure\GoogleSpreadsheetsHandler.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Tests.cs" />
