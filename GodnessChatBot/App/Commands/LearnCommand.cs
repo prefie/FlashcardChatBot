@@ -10,13 +10,13 @@ namespace GodnessChatBot.App.Commands
 {
     public class LearnCommand : Command
     {
-        public override string Name => "Учить";
-        private Dictionary<string, IDialogBranch> dialogs;
-        private Func<LearningDialogBranch> createLearningDialogBranch;
+        protected override string Name => "Учить";
+        private readonly Dictionary<string, IDialogBranch> dialogs;
+        private readonly Func<LearningDialogBranch> createLearningDialogBranch;
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
-            var keyboard = TelegramBot.GetButtons(repository.GetPacksNames(message.From.Id.ToString()).ToList());
+            var keyboard = TelegramBot.GetButtons(Repository.GetPacksNames(message.From.Id.ToString()).ToList());
 
             dialogs[chatId.ToString()] = createLearningDialogBranch();
             await client.SendTextMessageAsync(chatId, 

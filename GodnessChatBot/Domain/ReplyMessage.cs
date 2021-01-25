@@ -19,9 +19,5 @@ namespace GodnessChatBot.Domain
             Messages = string.Join("\n\n", messages);
             ReplyOptions = new List<string>();
         }
-
-        public ReplyMessage JoinReplyMessages(ReplyMessage otherMessage) =>
-            new ReplyMessage(new List<string>{Messages, otherMessage.Messages},
-                ReplyOptions.Concat(otherMessage.ReplyOptions).ToList());
     }
 }

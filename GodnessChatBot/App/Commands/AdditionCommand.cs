@@ -10,13 +10,13 @@ namespace GodnessChatBot.App.Commands
 {
     public class AdditionCommand : Command
     {
-        public override string Name => "Добавить карту в колоду";
-        private Dictionary<string, IDialogBranch> dialogs;
-        private Func<AdditionDialogBranch> createAdditionDialogBranch;
+        protected override string Name => "Добавить карту в колоду";
+        private readonly Dictionary<string, IDialogBranch> dialogs;
+        private readonly Func<AdditionDialogBranch> createAdditionDialogBranch;
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
-            var keyboard = TelegramBot.GetButtons(repository.GetPacksNames(message.From.Id.ToString()).ToList());
+            var keyboard = TelegramBot.GetButtons(Repository.GetPacksNames(message.From.Id.ToString()).ToList());
 
             dialogs[chatId.ToString()] = createAdditionDialogBranch();
             await client.SendTextMessageAsync(chatId, 

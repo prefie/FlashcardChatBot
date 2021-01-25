@@ -9,9 +9,9 @@ namespace GodnessChatBot.App.Commands
 {
     public class CreateCommand : Command
     {
-        public override string Name => "Создать";
-        private Dictionary<string, IDialogBranch> dialogs;
-        private Func<CreationDialogBranch> createCreationDialogBranch;
+        protected override string Name => "Создать";
+        private readonly Dictionary<string, IDialogBranch> dialogs;
+        private readonly Func<CreationDialogBranch> createCreationDialogBranch;
         public override async void Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
