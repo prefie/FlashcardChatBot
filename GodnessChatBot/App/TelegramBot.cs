@@ -5,6 +5,7 @@ using GodnessChatBot.Domain;
 using GodnessChatBot.Domain.DialogBranches;
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace GodnessChatBot.App
@@ -32,56 +33,68 @@ namespace GodnessChatBot.App
 
         public void Stop() => bot.StopReceiving();
 
-        private void BotOnMessage(object sender, MessageEventArgs e)
+        private async void BotOnMessage(object sender, MessageEventArgs e)
         {
             var message = e.Message;
             var userId = message.From.Id.ToString();
-            
-            if (!dialogBranches.ContainsKey(userId))
-                dialogBranches.Add(userId, null);
-            
-            Console.WriteLine($"{message.From.FirstName} {message.From.LastName} отправил сообщение боту: {message.Text}");
+            try
+            {
+                if (!dialogBranches.ContainsKey(userId))
+                    dialogBranches.Add(userId, null);
 
-            if (dialogBranches[userId] == null)
-                foreach (var command in commands)
-                {
-                    if (command.Equals(message.Text))
+                if (dialogBranches[userId] == null)
+                    foreach (var command in commands)
                     {
-                        command.Execute(message, bot);
-                        return;
+                        if (command.Equals(message.Text))
+                        {
+                            command.Execute(message, bot);
+                            return;
+                        }
                     }
-                }
             
-            SendMessages(message.From.Id.ToString(), message.Text);
+                SendMessages(message.From.Id.ToString(), message.Text);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                await bot.SendTextMessageAsync(message.From.Id, "Что-то пошло не так :(\nПопробуй позже");
+            }
         }
         
         private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs e)
         {
             var callbackQuery = e.CallbackQuery;
             var userId = callbackQuery.From.Id.ToString();
-            
-            await bot.EditMessageReplyMarkupAsync(e.CallbackQuery.Message.Chat.Id,
-                e.CallbackQuery.Message.MessageId);
-
-            if (!dialogBranches.ContainsKey(userId))
+            try
             {
-                await bot.SendTextMessageAsync(callbackQuery.From.Id,
-                    @"Извини, я тебя не понял, давай начнем сначала :( 
+                await bot.EditMessageReplyMarkupAsync(e.CallbackQuery.Message.Chat.Id,
+                    e.CallbackQuery.Message.MessageId);
+
+                if (!dialogBranches.ContainsKey(userId))
+                {
+                    await bot.SendTextMessageAsync(callbackQuery.From.Id,
+                        @"Извини, я тебя не понял, давай начнем сначала :( 
 Вызови команду /help и я расскажу тебе, что я умею :)");
-                return;
-            }
+                    return;
+                }
 
-            if (callbackQuery.Data == "Завершить" || callbackQuery.Data == "Закончить обучение")
-            {
-                if (dialogBranches[userId] == null) return;
-                var messages = dialogBranches[userId].Finish(userId).Messages;
+                if (callbackQuery.Data == "Завершить" || callbackQuery.Data == "Закончить обучение")
+                {
+                    if (dialogBranches[userId] == null) return;
+                    var messages = dialogBranches[userId].Finish(userId).Messages;
 
-                dialogBranches[userId] = null;
-                await bot.SendTextMessageAsync(callbackQuery.From.Id, messages);
-                return;
-            }
+                    dialogBranches[userId] = null;
+                    await bot.SendTextMessageAsync(callbackQuery.From.Id, messages);
+                    return;
+                }
             
-            SendMessages(callbackQuery.From.Id.ToString(), callbackQuery.Data);
+                SendMessages(callbackQuery.From.Id.ToString(), callbackQuery.Data);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                await bot.SendTextMessageAsync(callbackQuery.From.Id, "Что-то пошло не так :(\nПопробуй позже");
+            }
         }
 
         private async void SendMessages(string id, string message)
