@@ -50,7 +50,7 @@ namespace GodnessChatBot.Domain
         public void UpdateStatisticsPack(string userId, Pack pack)
         {
             var spreadsheetId = GetSpreadsheetId(userId);
-            var cards = pack.Cards.ToDictionary(card => (card.Face, card.Back));
+            var cards = pack.Cards.Distinct().ToDictionary(card => (card.Face, card.Back));
 
             var table = GetValuesSheet(spreadsheetId, pack.Name);
             var values = table.Values;

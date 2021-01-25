@@ -16,7 +16,7 @@ namespace GodnessChatBot.Domain.LearningWays
             {
                 state = LearningCheckYourselfState.WaitingAnotherCard;
                 return new ReplyMessage(new List<string>{card.Face}, 
-                    new List<string>{"Показать ответ", "Помню", "Не помню"});
+                    new List<string>{"Показать ответ"});
             }
             
             NeedNextCard = !string.Equals(message, "Показать ответ", StringComparison.InvariantCultureIgnoreCase);
@@ -27,9 +27,15 @@ namespace GodnessChatBot.Domain.LearningWays
                 return new ReplyMessage(new List<string>{question}, 
                     new List<string> {"Помню", "Не помню"});
             }
-            
+
+            if (!string.Equals(message, "Помню", StringComparison.CurrentCultureIgnoreCase)
+                && !string.Equals(message, "Не помню", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return new ReplyMessage(new List<string> 
+                    { "Недопустимый вариант ответа, нажми на одну из кнопок сообщения выше :)" });
+            }
             return new ReplyMessage(new List<string>{"Хорошо, идём дальше", question}, 
-                    new List<string>{"Показать ответ", "Помню", "Не помню"});
+                    new List<string>{"Показать ответ"});
         }
     }
 

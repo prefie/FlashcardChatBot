@@ -12,20 +12,15 @@ namespace GodnessChatBot.App
     public class TelegramBot
     {
         private readonly TelegramBotClient bot;
-        private readonly List<Command> commands = new List<Command>();
-        private readonly Dictionary<string, IDialogBranch> dialogBranches = new Dictionary<string, IDialogBranch>();
-        private readonly Repository repository = new Repository();
+        private readonly Command[] commands;
+        private readonly Dictionary<string, IDialogBranch> dialogBranches;
 
-        public TelegramBot()
+        public TelegramBot(Command[] commands,
+            TelegramBotClient bot, Dictionary<string, IDialogBranch> dialogBranches)
         {
-            bot = new TelegramBotClient(AppSettings.Key);
-            commands.Add(new HelloCommand(repository));
-            commands.Add(new HelpCommand(repository));
-            commands.Add(new SendPackCommand(repository));
-            commands.Add(new SendTableCommand(repository));
-            commands.Add(new CreateCommand(repository, dialogBranches));
-            commands.Add(new LearnCommand(repository, dialogBranches));
-            commands.Add(new AdditionCommand(repository, dialogBranches));
+            this.commands = commands;
+            this.bot = bot;
+            this.dialogBranches = dialogBranches;
         }
 
         public void Start()

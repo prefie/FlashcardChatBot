@@ -15,15 +15,10 @@ namespace GodnessChatBot.Domain.Processes
         private int currentIndex;
         private Repository repository;
 
-        public LearningDialogBranch(Repository repository)
+        public LearningDialogBranch(Repository repository, HashSet<LearningWay> learningWays)
         {
             this.repository = repository;
-            learningWays = new HashSet<LearningWay>
-            {
-                new LearningWayByTest(),
-                new LearningWayByTyping(),
-                new LearningWayCheckYourself()
-            };
+            this.learningWays = learningWays;
         }
 
         public ReplyMessage Execute(string id, string message)
@@ -34,7 +29,7 @@ namespace GodnessChatBot.Domain.Processes
 
                 if (pack == null)
                     return new ReplyMessage(new List<string>
-                        {"Этой колоды нет, она пустая или там ошибка, проверь таблицу:("});
+                        {"Этой колоды нет, она пустая или в ней ошибка"});
                 
                 pack.OrderCards();
                 status = LearningDialogBranchState.WaitingLearningWay;
@@ -72,13 +67,14 @@ namespace GodnessChatBot.Domain.Processes
         public ReplyMessage Finish(string id)
         {
             if (pack == null)
-                return new ReplyMessage(new List<string> {"Вызови команду /создать"});
+                return new ReplyMessage(new List<string>
+                    {"Вызови команду «Получить ссылку на таблицу» и проверь колоду :)"});
             
             repository.UpdateStatisticsPack(id, pack);
             return new ReplyMessage(new List<string> {"Отличная тренировка!"});
         }
     }
-    
+
     public enum LearningDialogBranchState
     {
         SelectingPack,

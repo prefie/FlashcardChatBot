@@ -14,22 +14,22 @@ namespace GodnessChatBot.Infrastructure
 {
     public class GoogleSpreadsheetsHandler
     {
-        private readonly SheetsService SheetsService;
-        private readonly DriveService DriveService;
+        private readonly SheetsService sheetsService;
+        private readonly DriveService driveService;
 
         protected GoogleSpreadsheetsHandler(string appName, string client, string[] scopes)
         {
             var credential = GetSheetCredentials(client, scopes);
             
-            SheetsService = GetSheetsService(credential, appName);
-            DriveService = GetDriveService(credential, appName);
+            sheetsService = GetSheetsService(credential, appName);
+            driveService = GetDriveService(credential, appName);
         }
 
         protected Spreadsheet GetSpreadsheet(string spreadsheetId) =>
-            SheetsService.Spreadsheets.Get(spreadsheetId).Execute();
+            sheetsService.Spreadsheets.Get(spreadsheetId).Execute();
 
         protected Spreadsheet CreateSpreadsheet(string spreadsheetName, Sheet[] sheets) =>
-            SheetsService.Spreadsheets.Create(new Spreadsheet
+            sheetsService.Spreadsheets.Create(new Spreadsheet
             {
                 Properties = new SpreadsheetProperties {Title = spreadsheetName},
                 Sheets = sheets
@@ -37,7 +37,7 @@ namespace GodnessChatBot.Infrastructure
 
         protected void SetPermissions(string spreadsheetId, string type, string role)
         {
-            DriveService.Permissions
+            driveService.Permissions
                 .Create(new Permission {Type = type, Role = role}, spreadsheetId).Execute();
         }
         
@@ -56,12 +56,12 @@ namespace GodnessChatBot.Infrastructure
         
             var request = new List<Request> {addSheetRequest};
             var batchUpdateRequest = new BatchUpdateSpreadsheetRequest {Requests = request};
-            SheetsService.Spreadsheets.BatchUpdate(batchUpdateRequest, spreadsheetId).Execute();
+            sheetsService.Spreadsheets.BatchUpdate(batchUpdateRequest, spreadsheetId).Execute();
         }
 
         protected void UpdateValuesTable(ValueRange values, string spreadsheetId, string range)
         {
-            var request = SheetsService.Spreadsheets.Values.Update(values, spreadsheetId, range);
+            var request = sheetsService.Spreadsheets.Values.Update(values, spreadsheetId, range);
             request.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
             request.Execute();
         }
@@ -113,7 +113,7 @@ namespace GodnessChatBot.Infrastructure
         {
             try
             {
-                var values = SheetsService.Spreadsheets.Values.Get(spreadsheetId, range).Execute();
+                var values = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range).Execute();
                 return values;
             }
             catch (Exception)
