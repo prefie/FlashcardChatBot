@@ -44,11 +44,9 @@ namespace GodnessChatBot.App
                 if (dialogBranches[userId] == null)
                     foreach (var command in commands)
                     {
-                        if (command.Equals(message.Text))
-                        {
-                            command.Execute(message, bot);
-                            return;
-                        }
+                        if (!command.Equals(message.Text)) continue;
+                        command.Execute(message, bot);
+                        return;
                     }
             
                 SendMessages(message.From.Id.ToString(), message.Text);
